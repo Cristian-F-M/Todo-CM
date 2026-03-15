@@ -28,7 +28,6 @@ Here is a glimpse of what the app looks like:
 
 ## 📥 Download
 
-*(Add your download link here, e.g., Google Play Store link, APK release link, or App Store link)*
 [➡️ Download Latest Release](https://github.com/Cristian-F-M/todo-app-v2/releases)
 
 ---
