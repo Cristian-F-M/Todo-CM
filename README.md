@@ -28,7 +28,7 @@ Here is a glimpse of what the app looks like:
 
 ## 📥 Download
 
-[➡️ Download Latest Release](https://github.com/Cristian-F-M/todo-app-v2/releases)
+[➡️ Download Latest Release](https://github.com/Cristian-F-M/Todo-CM/releases)
 
 ---
 
