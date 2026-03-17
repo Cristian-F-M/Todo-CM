@@ -209,10 +209,17 @@ export async function removeTheme(themeId: string) {
 	ToastAndroid.show('Tema eliminado', ToastAndroid.SHORT)
 }
 
-
 export function getRandomTheme() {
 	const { themes } = useTheme.getState()
 	const themeIds = Object.keys(themes)
 	const randomThemeId = themeIds[Math.floor(Math.random() * themeIds.length)]
 	return randomThemeId
+}
+
+export function RGBThemeColors(colors: ThemeParsedObject['colors']) {
+	const entries = Object.entries(colors).map(([key, color]) => {
+		return [key, RGBA(color)]
+	})
+
+	return Object.fromEntries(entries)
 }
