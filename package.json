@@ -1,6 +1,6 @@
 {
 	"name": "todo-v2",
-	"version": "1.14.3",
+	"version": "1.14.4",
 	"main": "expo-router/entry",
 	"author": {
 		"email": "cfmorales.diaz@gmail.com",
@@ -10,7 +10,7 @@
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/Cristian-F-M/todo-app-v2.git"
+		"url": "https://github.com/Cristian-F-M/Todo-CM.git"
 	},
 	"private": false,
 	"keywords": [
