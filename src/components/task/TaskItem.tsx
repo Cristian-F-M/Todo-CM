@@ -5,11 +5,7 @@ import {
 } from '@tabler/icons-react-native'
 import { useCallback, useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
-import Animated, {
-	FadeIn,
-	FadeOut,
-	LinearTransition
-} from 'react-native-reanimated'
+import Animated, { LinearTransition } from 'react-native-reanimated'
 import { twMerge } from 'tailwind-merge'
 import { Checkbox } from '@/components/Checkbox/Checkbox'
 import { ContextMenu } from '@/components/context-menu/ContextMenu'
@@ -62,8 +58,6 @@ export function TaskItem({ task }: { task: Task }) {
 				borderColor: themeStyles.border()
 			}}
 			layout={LinearTransition.stiffness(2).duration(150)}
-			entering={FadeIn}
-			exiting={FadeOut}
 		>
 			<View className="flex flex-row max-w-60 gap-x-3 items-center">
 				<Checkbox value={isChecked} onValueChange={handleCompleteTask} />

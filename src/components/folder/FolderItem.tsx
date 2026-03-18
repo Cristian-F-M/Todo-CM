@@ -7,11 +7,7 @@ import {
 import { Link } from 'expo-router'
 import { useCallback } from 'react'
 import { Pressable, Text, View } from 'react-native'
-import Animated, {
-	FadeIn,
-	FadeOut,
-	LinearTransition
-} from 'react-native-reanimated'
+import Animated, { LinearTransition } from 'react-native-reanimated'
 import { ContextMenu } from '@/components/context-menu/ContextMenu'
 import { useConfig } from '@/state/config'
 import useFolder from '@/state/Folder'
@@ -55,8 +51,6 @@ export function FolderItem({ folder }: { folder: FolderType }) {
 				<Animated.View
 					className="flex flex-row flex-1 items-center justify-between"
 					layout={LinearTransition.stiffness(2)}
-					entering={FadeIn}
-					exiting={FadeOut}
 				>
 					<View className="flex flex-row gap-x-2 items-center justify-center">
 						<IconFolder color={themeStyles.textMuted()} />
