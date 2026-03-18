@@ -1,20 +1,34 @@
 import { IconFolderPlus } from '@tabler/icons-react-native'
-import { useCallback } from 'react'
-import { Animated, Pressable, Text } from 'react-native'
+import { useCallback, useEffect } from 'react'
+import { Pressable, Text } from 'react-native'
+import Animated, { useSharedValue, withSpring } from 'react-native-reanimated'
 import { StyledPressable } from '@/components/layout/StyledPressable'
 import { useModal } from '@/state/modal'
 import { useThemeStyles } from '@/utils/theme'
 
-export function NoFolders() {
+export function NoFolders({ thereAreFolders }: { thereAreFolders: boolean }) {
 	const { openModal } = useModal()
 	const themeStyles = useThemeStyles()
+	const opacity = useSharedValue(0)
 
 	const handleClickOpenModal = useCallback(() => {
 		openModal('folder')
 	}, [openModal])
 
+	useEffect(() => {
+		const opts = { duration: 800 }
+
+		if (thereAreFolders) opacity.value = withSpring(0, opts)
+		else opacity.value = withSpring(1, opts)
+	}, [thereAreFolders, opacity])
+
 	return (
-		<Animated.View className="items-center mt-16 w-11/12 mx-auto py-10 px-4 rounded-lg">
+		<Animated.View
+			className="items-center mt-0 w-11/12 mx-auto py-10 px-4 rounded-lg"
+			style={{
+				opacity
+			}}
+		>
 			<Pressable
 				className="flex-row items-center justify-center rounded-full p-7"
 				style={{

@@ -1,7 +1,8 @@
 import { Stack, useGlobalSearchParams } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
-import { useCallback, useLayoutEffect, useMemo } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo } from 'react'
 import { FlatList, type ListRenderItemInfo, Text, View } from 'react-native'
+import Animated, { useSharedValue, withSpring } from 'react-native-reanimated'
 import { Folder404 } from '@/components/folder/Folder404'
 import { BackgroundIcon } from '@/components/layout/BackgroundIcon'
 import { Screen } from '@/components/layout/Screen'
@@ -30,6 +31,7 @@ export default function Folder() {
 	const folderId = id as string
 	const folder = getById(folderId)
 	const themeStyles = useThemeStyles()
+	const opacity = useSharedValue(1)
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: Is necessary add tasksFromContext to the dependency array to update the tasks when a new task is created
 	const tasks = useMemo(() => {
@@ -111,6 +113,13 @@ export default function Folder() {
 		}
 	}, [setFolderId, folderId])
 
+	useEffect(() => {
+		const opts = { duration: 800 }
+
+		if (thereAreTasks) opacity.value = withSpring(1, opts)
+		else opacity.value = withSpring(0, opts)
+	}, [thereAreTasks, opacity])
+
 	const renderItem = useCallback(
 		({ item }: ListRenderItemInfo<TaskRenderItem>) => {
 			if (!('type' in item)) return <TaskItem task={item as Task} />
@@ -147,7 +156,12 @@ export default function Folder() {
 			<Stack.Screen options={screenOptions} />
 			{thereAreTasks && <BackgroundIcon />}
 
-			<View className="px-2">
+			<Animated.View
+				className="px-2"
+				style={{
+					opacity
+				}}
+			>
 				<View className="flex flex-row items-center justify-between mt-3 px-2">
 					<Text
 						className="text-base"
@@ -174,9 +188,9 @@ export default function Folder() {
 						keyExtractor={(item) => item.id}
 					/>
 				)}
+			</Animated.View>
 
-				{!thereAreTasks && <NoTasks />}
-			</View>
+			{!thereAreTasks && <NoTasks thereAreTasks={thereAreTasks} />}
 		</Screen>
 	)
 }

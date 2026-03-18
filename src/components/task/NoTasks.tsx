@@ -1,20 +1,34 @@
 import { IconFolder } from '@tabler/icons-react-native'
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { Pressable, Text, View } from 'react-native'
+import Animated, { useSharedValue, withSpring } from 'react-native-reanimated'
 import { StyledPressable } from '@/components/layout/StyledPressable'
 import { useModal } from '@/state/modal'
 import { useThemeStyles } from '@/utils/theme'
 
-export function NoTasks() {
+export function NoTasks({ thereAreTasks }: { thereAreTasks: boolean }) {
 	const { openModal } = useModal()
 	const themeStyles = useThemeStyles()
+	const opacity = useSharedValue(0)
 
 	const handleClickOpenModal = useCallback(() => {
 		openModal('task')
 	}, [openModal])
 
+	useEffect(() => {
+		const opts = { duration: 800 }
+
+		if (thereAreTasks) opacity.value = withSpring(0, opts)
+		else opacity.value = withSpring(1, opts)
+	}, [thereAreTasks, opacity])
+
 	return (
-		<View className="items-center justify-center mt-24 w-4/5 mx-auto">
+		<Animated.View
+			className="items-center justify-center mt-24 w-4/5 mx-auto"
+			style={{
+				opacity: opacity
+			}}
+		>
 			<Pressable
 				className="flex-row items-center justify-center rounded-full p-7"
 				style={{
@@ -44,6 +58,6 @@ export function NoTasks() {
 				className="mt-8"
 				onPress={handleClickOpenModal}
 			/>
-		</View>
+		</Animated.View>
 	)
 }
