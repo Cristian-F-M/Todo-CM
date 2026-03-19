@@ -4,6 +4,7 @@ import Animated, { useSharedValue, withSpring } from 'react-native-reanimated'
 import { FolderItem } from '@/components/folder/FolderItem'
 import { NoFolders } from '@/components/folder/NoFolders'
 import { BackgroundIcon } from '@/components/layout/BackgroundIcon'
+import { FloatingDownload } from '@/components/layout/FloatingDownload'
 import { Header } from '@/components/layout/Header'
 import { Screen } from '@/components/layout/Screen'
 import useFolder from '@/state/Folder'
@@ -40,6 +41,8 @@ export default function Index() {
 			</Animated.View>
 
 			{!thereIsFolders && <NoFolders thereAreFolders={thereIsFolders} />}
+
+			<FloatingDownload />
 		</Screen>
 	)
 }
