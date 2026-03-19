@@ -16,6 +16,7 @@ export interface Modals {
 	folder: Modal
 	task: Modal
 	delete: Modal
+	[key: string]: Modal
 }
 
 export type ModalKey = keyof Modals
