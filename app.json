@@ -1,51 +1,49 @@
 {
 	"$schema": "https://www.schemastore.org/expo-53.0.0.json",
-	"expo": {
-		"name": "todo cm",
-		"slug": "todo-cm",
-		"version": "1.16.0",
-		"githubUrl": "https://github.com/Cristian-F-M/todo-app-v2",
-		"orientation": "portrait",
-		"icon": "./src/assets/logo-cm-small-white.png",
-		"userInterfaceStyle": "automatic",
-		"newArchEnabled": true,
-		"scheme": "todo-cm",
-		"platforms": [
-			"android"
-		],
-		"splash": {
-			"image": "./src/assets/logo-cm-white.png",
-			"resizeMode": "contain",
+	"name": "todo cm",
+	"slug": "todo-cm",
+	"version": "1.16.0",
+	"githubUrl": "https://github.com/Cristian-F-M/todo-app-v2",
+	"orientation": "portrait",
+	"icon": "./src/assets/logo-cm-small-white.png",
+	"userInterfaceStyle": "automatic",
+	"newArchEnabled": true,
+	"scheme": "todo-cm",
+	"platforms": [
+		"android"
+	],
+	"splash": {
+		"image": "./src/assets/logo-cm-white.png",
+		"resizeMode": "contain",
+		"backgroundColor": "#111827"
+	},
+	"android": {
+		"adaptiveIcon": {
+			"foregroundImage": "./src/assets/logo-cm-small-white.png",
 			"backgroundColor": "#111827"
 		},
-		"android": {
-			"adaptiveIcon": {
-				"foregroundImage": "./src/assets/logo-cm-small-white.png",
-				"backgroundColor": "#111827"
-			},
-			"package": "com.morales.todocm",
-			"permissions": [
-				"android.permission.REQUEST_INSTALL_PACKAGES"
-			]
-		},
-		"plugins": [
-			"expo-router",
-			"expo-sqlite",
-			[
-				"expo-notifications",
-				{
-					"icon": "./src/assets/logo-cm-white.png"
-				}
-			],
-			"@react-native-community/datetimepicker"
-		],
-		"extra": {
-			"router": {
-				"origin": false
-			},
-			"eas": {
-				"projectId": "f8148ba5-8662-4e8d-8b2c-ed66367e4e7d"
+		"package": "com.morales.todocm",
+		"permissions": [
+			"android.permission.REQUEST_INSTALL_PACKAGES"
+		]
+	},
+	"plugins": [
+		"expo-router",
+		"expo-sqlite",
+		[
+			"expo-notifications",
+			{
+				"icon": "./src/assets/logo-cm-white.png"
 			}
+		],
+		"@react-native-community/datetimepicker"
+	],
+	"extra": {
+		"router": {
+			"origin": false
+		},
+		"eas": {
+			"projectId": "f8148ba5-8662-4e8d-8b2c-ed66367e4e7d"
 		}
 	}
 }
