@@ -6,13 +6,13 @@ import { Portal } from 'react-native-portalize'
 import Animated, { useSharedValue, withSpring } from 'react-native-reanimated'
 import LogoCMSmallWhite from '@/assets/logo-cm-small-white.png'
 import { useModal } from '@/state/modal'
-import { useRealese } from '@/state/realese'
+import { useRelease } from '@/state/release'
 import { useThemeStyles } from '@/utils/theme'
 
 export function FloatingDownload() {
 	const tabBarHeight = useBottomTabBarHeight()
 	const themeStyles = useThemeStyles()
-	const { progress } = useRealese()
+	const { progress } = useRelease()
 	const scale = useSharedValue(0.9)
 	const opacity = useSharedValue(0)
 	const { openModal } = useModal()

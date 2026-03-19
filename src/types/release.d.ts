@@ -1,4 +1,4 @@
-export interface RealeseData {
+export interface ReleaseData {
 	url: string
 	assets_url: string
 	upload_url: string

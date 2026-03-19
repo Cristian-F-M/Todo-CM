@@ -1,14 +1,14 @@
 import { create } from 'zustand'
-import type { RealeseData } from '@/types/realese'
+import type { ReleaseData } from '@/types/release'
 
-interface RealeseState {
-	data: RealeseData | null
+interface ReleaseState {
+	data: ReleaseData | null
 	progress: number | null
-	setData: (data: RealeseData) => void
+	setData: (data: ReleaseData) => void
 	setProgress: (progress: number | null) => void
 }
 
-export const useRealese = create<RealeseState>((set) => ({
+export const useRelease = create<ReleaseState>((set) => ({
 	data: null,
 	progress: null,
 	setData: (data) => set({ data }),

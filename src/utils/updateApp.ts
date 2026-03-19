@@ -4,8 +4,8 @@ import * as IntentLauncher from 'expo-intent-launcher'
 import * as Notifications from 'expo-notifications'
 import { ToastAndroid } from 'react-native'
 import { useModal } from '@/state/modal'
-import { useRealese } from '@/state/realese'
-import type { RealeseData } from '@/types/realese'
+import { useRelease } from '@/state/release'
+import type { ReleaseData } from '@/types/release'
 import { LOGGER } from '@/utils/logger'
 import pkg from '../../package.json' with { type: 'json' }
 import { getNotificationsPermissions } from './notifications'
@@ -13,7 +13,7 @@ import { getNotificationsPermissions } from './notifications'
 type GetLatestAppDataReturn =
 	| {
 			succes: true
-			data: RealeseData
+			data: ReleaseData
 	  }
 	| {
 			succes: false
@@ -29,9 +29,9 @@ export async function getLatestAppData(): Promise<GetLatestAppDataReturn> {
 		if (!response.ok)
 			return { succes: false, error: 'Error al obtener los datos' }
 
-		const data = (await response.json()) as RealeseData
+		const data = (await response.json()) as ReleaseData
 
-		useRealese.getState().setData(data)
+		useRelease.getState().setData(data)
 		return { succes: true, data }
 	} catch (error) {
 		LOGGER.error(error)
@@ -55,10 +55,10 @@ export async function checkUpdate() {
 }
 
 export async function downloadApp() {
-	const { data } = useRealese.getState()
+	const { data } = useRelease.getState()
 	const assets = data?.assets ?? []
 	const asset = assets.find((asset) => asset.name.includes('apk'))
-	const { setProgress } = useRealese.getState()
+	const { setProgress } = useRelease.getState()
 	let lastPercent = 0
 
 	if (!data || !asset)
@@ -149,7 +149,7 @@ export async function installAPK(uri: string) {
 }
 
 export function getIsValidAPK() {
-	const { data } = useRealese.getState()
+	const { data } = useRelease.getState()
 
 	if (!data) return false
 

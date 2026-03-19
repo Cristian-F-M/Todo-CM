@@ -4,14 +4,14 @@ import { useMemo, useState } from 'react'
 import { Image, Linking, Pressable, Text, View } from 'react-native'
 import Markdown from 'react-native-markdown-renderer'
 import type { SvgProps } from 'react-native-svg'
-import { useRealese } from '@/state/realese'
+import { useRelease } from '@/state/release'
 import { useThemeStyles } from '@/utils/theme'
 import { downloadApp, getIsValidAPK } from '@/utils/updateApp'
 import { StyledPressable } from '../layout/StyledPressable'
 
 export function UpdateAppModal() {
 	const themeStyles = useThemeStyles()
-	const { data, progress } = useRealese()
+	const { data, progress } = useRelease()
 	const [height, setHeight] = useState<number | 'auto'>(140)
 	// biome-ignore lint/correctness/useExhaustiveDependencies: It is neccesary
 	const isValidAPK = useMemo(() => getIsValidAPK(), [data])
