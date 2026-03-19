@@ -22,7 +22,8 @@
         "foregroundImage": "./src/assets/logo-cm-small-white.png",
         "backgroundColor": "#111827"
       },
-      "package": "com.morales.todocm"
+      "package": "com.morales.todocm",
+			"permissions": ["android.permission.REQUEST_INSTALL_PACKAGES"]
     },
     "plugins": [
       "expo-router",
