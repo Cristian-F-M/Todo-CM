@@ -20,6 +20,7 @@ import { DeleteModal } from '@/components/modal/DeleteModal'
 import { FolderModal } from '@/components/modal/FolderModal'
 import { Modal } from '@/components/modal/Modal'
 import { TaskModal } from '@/components/modal/TaskModal'
+import { UpdateAppModal } from '@/components/modal/updateApp'
 import { useConfig } from '@/state/config'
 import useFolder from '@/state/Folder'
 import { useModal } from '@/state/modal'
@@ -28,6 +29,7 @@ import { useTheme } from '@/state/theme'
 import type { Theme } from '@/types/theme'
 import { migrateDB, removeNotificationId } from '@/utils/database'
 import { useThemeStyles } from '@/utils/theme'
+import { checkUpdate } from '@/utils/updateApp'
 
 // This is the default configuration
 configureReanimatedLogger({
@@ -71,6 +73,7 @@ export default function RootLayout() {
 	const taskModalRef = useRef<Modalize>(null)
 	const folderModalRef = useRef<Modalize>(null)
 	const deleteModalRef = useRef<Modalize>(null)
+	const updateModalRef = useRef<Modalize>(null)
 	const themeStyles = useThemeStyles()
 
 	const themeVars = useMemo(() => {
@@ -127,7 +130,13 @@ export default function RootLayout() {
 		setModal('task', { ...getModalFns(taskModalRef) })
 		setModal('folder', { ...getModalFns(folderModalRef) })
 		setModal('delete', { ...getModalFns(deleteModalRef) })
+		setModal('update', { ...getModalFns(updateModalRef) })
 	}, [setModal, getModalFns])
+
+	useLayoutEffect(() => {
+		checkUpdate()
+		// Guardar la fecha en que se mostro y volver a mostrar cada 24 horas.
+	}, [])
 
 	return (
 		<GestureHandlerRootView>
@@ -159,6 +168,10 @@ export default function RootLayout() {
 
 				<Modal modalRef={deleteModalRef}>
 					<DeleteModal />
+				</Modal>
+
+				<Modal modalRef={updateModalRef}>
+					<UpdateAppModal />
 				</Modal>
 			</Host>
 		</GestureHandlerRootView>
