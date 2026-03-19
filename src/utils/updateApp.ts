@@ -1,6 +1,8 @@
+import { useModal } from '@/state/modal'
 import { useRealese } from '@/state/realese'
 import type { RealeseData } from '@/types/realese'
 import { LOGGER } from '@/utils/logger'
+import pkg from '../../package.json' with { type: 'json' }
 
 type GetLatestAppDataReturn =
 	| {
@@ -29,4 +31,19 @@ export async function getLatestAppData(): Promise<GetLatestAppDataReturn> {
 		LOGGER.error(error)
 		return { succes: false, error: 'Error al obtener los datos' }
 	}
+}
+
+export async function checkUpdate() {
+	const response = await getLatestAppData()
+	const { openModal } = useModal.getState()
+
+	if (!response.succes) return null
+
+	const { version } = pkg
+	const { tag_name } = response.data
+
+	const v = Number(version.split('.').join(''))
+	const t = Number(tag_name.split('.').join(''))
+
+	if (t > v) return openModal('update')
 }
