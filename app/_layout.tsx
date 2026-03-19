@@ -49,6 +49,19 @@ Notifications.setNotificationHandler({
 	handleSuccess: removeNotificationId
 })
 
+Notifications.setNotificationChannelAsync('default', {
+	name: 'default',
+	importance: Notifications.AndroidImportance.HIGH,
+	vibrationPattern: [200, 100, 200],
+	showBadge: true
+})
+
+Notifications.addNotificationResponseReceivedListener((response) => {
+	;[response] // <- Only for the linter :)
+	// Maybe it will be used in the future
+	// const { data } = response.notification.request.content
+})
+
 export default function RootLayout() {
 	const { theme, themes, load: loadThemes } = useTheme()
 	const { load: loadConfigs } = useConfig()
