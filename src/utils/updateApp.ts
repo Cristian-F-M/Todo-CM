@@ -1,5 +1,6 @@
 import * as FileSystem from 'expo-file-system'
 import { createDownloadResumable } from 'expo-file-system/legacy'
+import * as IntentLauncher from 'expo-intent-launcher'
 import * as Notifications from 'expo-notifications'
 import { ToastAndroid } from 'react-native'
 import { useModal } from '@/state/modal'
@@ -117,4 +118,46 @@ export async function downloadApp() {
 		ToastAndroid.show('Error al descargar la app', ToastAndroid.SHORT)
 		setProgress(null)
 	}
+}
+
+export async function installAPK(uri: string) {
+	const url = new FileSystem.File(uri).contentUri
+	const { closeModal } = useModal.getState()
+
+	ToastAndroid.show('Abriendo instalador...', ToastAndroid.SHORT)
+
+	try {
+		const { resultCode } = await IntentLauncher.startActivityAsync(
+			'android.intent.action.VIEW',
+			{
+				data: url,
+				flags: 1,
+				type: 'application/vnd.android.package-archive'
+			}
+		)
+
+		// TODO: If it is canceled, show a modal asking for install permissions
+
+		if (resultCode === IntentLauncher.ResultCode.Success) {
+			closeModal('update')
+		}
+
+		if (resultCode !== IntentLauncher.ResultCode.Canceled) return
+	} catch (error) {
+		LOGGER.error(error)
+	}
+}
+
+export function getIsValidAPK() {
+	const { data } = useRealese.getState()
+
+	if (!data) return false
+
+	const path: string | FileSystem.File = FileSystem.Paths.join(
+		FileSystem.Paths.cache.uri,
+		`${data.tag_name}.apk`
+	)
+
+	const file = new FileSystem.File(path)
+	return file.exists && file.size === data.assets[0].size
 }
