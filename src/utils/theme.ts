@@ -211,9 +211,7 @@ export async function removeTheme(themeId: string) {
 
 export function getRandomTheme() {
 	const { themes } = useTheme.getState()
-	const themeIds = Object.keys(themes)
-	const randomThemeId = themeIds[Math.floor(Math.random() * themeIds.length)]
-	return randomThemeId
+	return Object.keys(themes)[0]
 }
 
 export function RGBThemeColors(colors: ThemeParsedObject['colors']) {
