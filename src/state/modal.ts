@@ -28,14 +28,14 @@ export const useModal = create<ModalState>()((set, get) => ({
 	openModal: (key) => {
 		const { modals } = get()
 		const modal = modals[key]
-		modal.open?.()
+		modal?.open?.()
 
 		set({ modals: { ...modals, [key]: { ...modal, isOpen: true } } })
 	},
 	closeModal: (key) => {
 		const { modals } = get()
 		const modal = modals[key]
-		modal.close?.()
+		modal?.close?.()
 
 		set({ modals: { ...modals, [key]: { ...modal, isOpen: false } } })
 	}
