@@ -40,3 +40,8 @@ android/
 
 bun.lockb
 bun.lock
+
+credentials/
+credentials.json
+
+output/
