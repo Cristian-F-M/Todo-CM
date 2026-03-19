@@ -1,6 +1,6 @@
 {
 	"name": "todo-v2",
-	"version": "1.15.1",
+	"version": "1.16.0",
 	"main": "expo-router/entry",
 	"author": {
 		"email": "cfmorales.diaz@gmail.com",
@@ -45,7 +45,12 @@
 		"android": "expo run:android",
 		"ios": "expo run:ios",
 		"web": "expo start --web",
-		"lint": "eslint ."
+		"lint": "eslint .",
+		"build:apk": "bun run build:release",
+		"build:release": "bun run align:apk && bun run sign:apk",
+		"align:apk": "shx mkdir -p output && $ANDROID_HOME/build-tools/36.0.0/zipalign -f -v 4 android/app/build/outputs/apk/release/app-release.apk output/app-release.apk",
+		"sign:apk": "$ANDROID_HOME/build-tools/36.0.0/apksigner sign --ks credentials/android/todo-cm.jks --ks-key-alias cmorales --out output/app-release.apk output/app-release.apk",
+		"copy:debug": "shx mkdir -p output && shx cp android/app/build/outputs/apk/debug/app-debug.apk output/app-debug.apk"
 	},
 	"dependencies": {
 		"@animatereactnative/marquee": "0.5.2",
@@ -100,6 +105,7 @@
 		"eslint-config-prettier": "^10.0.2",
 		"eslint-plugin-prettier": "^5.2.3",
 		"prettier": "^3.5.3",
+		"shx": "0.4.0",
 		"typescript": "~5.9.2"
 	}
 }
