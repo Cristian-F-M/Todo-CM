@@ -1,9 +1,5 @@
 import * as FileSystem from 'expo-file-system'
-import {
-	consoleTransport,
-	logger,
-	type transportFunctionType
-} from 'react-native-logs'
+import { logger, type transportFunctionType } from 'react-native-logs'
 
 const currentDate = new Date()
 	.toLocaleString('es-CO', {
@@ -30,6 +26,15 @@ const fileTransport: transportFunctionType<any> = async ({ msg, level }) => {
 	} catch (error) {
 		console.error('Error escribiendo log:', error)
 	}
+}
+
+// biome-ignore lint/suspicious/noExplicitAny: -
+const consoleTransport: transportFunctionType<any> = async ({
+	level,
+	rawMsg
+}) => {
+	const line = `[${new Date().toISOString()}] [${level.text}] ${rawMsg}`
+	console.log(line)
 }
 
 export const LOGGER = logger.createLogger({
