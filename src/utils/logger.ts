@@ -5,22 +5,24 @@ import {
 	type transportFunctionType
 } from 'react-native-logs'
 
+const currentDate = new Date()
+	.toLocaleString('es-CO', {
+		timeZone: 'America/Bogota',
+		day: 'numeric',
+		month: '2-digit',
+		year: 'numeric'
+	})
+	.replace(/\//g, '-')
+
 const logsDir = new FileSystem.Directory(FileSystem.Paths.document, 'logs')
 if (!logsDir.exists) logsDir.create()
-export const LOG_FILE = new FileSystem.File(logsDir, 'app.log')
+export const LOG_FILE = new FileSystem.File(logsDir, `${currentDate}.log`)
+if (!LOG_FILE.exists) LOG_FILE.create()
 
 // biome-ignore lint/suspicious/noExplicitAny: -
 const fileTransport: transportFunctionType<any> = async ({ msg, level }) => {
 	try {
-		let existing = ''
-
-		const fileInfo = LOG_FILE.info()
-
-		if (!fileInfo.exists) {
-			LOG_FILE.create()
-		}
-
-		existing = LOG_FILE.textSync()
+		const existing = LOG_FILE.textSync()
 
 		const line = `[${new Date().toISOString()}] [${level.text}] ${msg}\n`
 
