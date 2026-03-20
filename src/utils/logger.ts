@@ -16,11 +16,11 @@ export const LOG_FILE = new FileSystem.File(logsDir, `${currentDate}.log`)
 if (!LOG_FILE.exists) LOG_FILE.create()
 
 // biome-ignore lint/suspicious/noExplicitAny: -
-const fileTransport: transportFunctionType<any> = async ({ msg, level }) => {
+const fileTransport: transportFunctionType<any> = async ({ rawMsg, level }) => {
 	try {
 		const existing = LOG_FILE.textSync()
 
-		const line = `[${new Date().toISOString()}] [${level.text}] ${msg}\n`
+		const line = `[${new Date().toISOString()}] [${level.text}] ${rawMsg}\n`
 
 		LOG_FILE.write(existing + line)
 	} catch (error) {
