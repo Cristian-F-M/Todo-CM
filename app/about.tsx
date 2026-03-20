@@ -7,8 +7,9 @@ import * as Clipboard from 'expo-clipboard'
 import * as Linking from 'expo-linking'
 import { Stack } from 'expo-router'
 import type { ExtendedStackNavigationOptions } from 'expo-router/build/layouts/StackClient'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import {
+	ActivityIndicator,
 	Pressable,
 	ScrollView,
 	StyleSheet,
@@ -19,12 +20,21 @@ import {
 import { SocialNetworks } from '@/components/about/social-networks/SocialNetworks'
 import { Screen } from '@/components/layout/Screen'
 import { APP_INFO } from '@/constants/about'
+import useRelease from '@/hooks/useRelease'
 import CMLogo from '@/icons/CMLogo'
+import { useModal } from '@/state/modal'
 import { useThemeStyles } from '@/utils/theme'
 import packageJson from '../package.json'
 
 export default function AboutPage() {
+	const [isSearchingUpdate, setIsSearchingUpdate] = useState(false)
+	const [searchUpdateText, setSearchUpdateText] = useState(
+		'Buscar actualización'
+	)
+	const { checkUpdate, needUpdate, data } = useRelease()
 	const themeStyles = useThemeStyles()
+	const { openModal } = useModal()
+
 	const styles = StyleSheet.create({
 		card: {
 			paddingHorizontal: 10,
@@ -99,6 +109,25 @@ export default function AboutPage() {
 		const url = `mailto:${packageJson.author.email}?subject=${subject}&body=${body}`
 		Linking.openURL(url)
 	}, [])
+
+	const handleSearchUpdate = useCallback(async () => {
+		// TODO: Verificar si hay conexión a internet - si no -> mostrat toast and return
+
+		setIsSearchingUpdate(true)
+		await checkUpdate()
+		setIsSearchingUpdate(false)
+
+		if (!data) return
+
+		if (needUpdate) {
+			openModal('update')
+			setSearchUpdateText(`Versión disponible: ${data.tag_name}`)
+			return
+		}
+
+		setSearchUpdateText('Estás en la última versión')
+	}, [checkUpdate, openModal, needUpdate, data])
+
 	return (
 		<Screen className="w-[90%] mx-auto">
 			<ScrollView showsVerticalScrollIndicator={false} className="py-4">
@@ -114,7 +143,7 @@ export default function AboutPage() {
 						<CMLogo width={40} height={40} color={themeStyles.textPrimary()} />
 					</View>
 					{/* <version /> */}
-					<View className="mt-1">
+					<View className="mt-1 items-center">
 						<Text
 							style={{
 								color: themeStyles.textSecondary()
@@ -122,8 +151,21 @@ export default function AboutPage() {
 						>
 							versión {packageJson.version}
 						</Text>
+						{/* <find-new-version /> */}
+						{isSearchingUpdate && <ActivityIndicator size={14} />}
+						{!isSearchingUpdate && (
+							<Pressable onPress={handleSearchUpdate}>
+								<Text
+									className="text-xs underline"
+									style={{
+										color: themeStyles.textSecondary()
+									}}
+								>
+									{searchUpdateText}
+								</Text>
+							</Pressable>
+						)}
 					</View>
-					{/* <find-new-version /> */}
 				</View>
 
 				{/* <social-networks /> */}
