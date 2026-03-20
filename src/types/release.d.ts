@@ -59,3 +59,13 @@ export interface Author {
 	user_view_type: string
 	site_admin: boolean
 }
+
+export type GetLatestAppDataReturn =
+	| {
+			succes: true
+			data: ReleaseData
+	  }
+	| {
+			succes: false
+			error: string
+	  }
