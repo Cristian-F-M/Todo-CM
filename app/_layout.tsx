@@ -29,7 +29,6 @@ import { useTheme } from '@/state/theme'
 import type { Theme } from '@/types/theme'
 import { migrateDB, removeNotificationId } from '@/utils/database'
 import { useThemeStyles } from '@/utils/theme'
-import { checkUpdate } from '@/utils/updateApp'
 
 // This is the default configuration
 configureReanimatedLogger({
@@ -133,10 +132,6 @@ export default function RootLayout() {
 		setModal('update', { ...getModalFns(updateModalRef) })
 	}, [setModal, getModalFns])
 
-	useLayoutEffect(() => {
-		checkUpdate()
-		// Guardar la fecha en que se mostro y volver a mostrar cada 24 horas.
-	}, [])
 
 	return (
 		<GestureHandlerRootView>
