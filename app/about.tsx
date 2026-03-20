@@ -19,7 +19,7 @@ import {
 } from 'react-native'
 import { SocialNetworks } from '@/components/about/social-networks/SocialNetworks'
 import { Screen } from '@/components/layout/Screen'
-import { APP_INFO } from '@/constants/about'
+import { APP_INFO, BASE_SEND_MESSAGE, BASE_URL } from '@/constants/about'
 import useRelease from '@/hooks/useRelease'
 import CMLogo from '@/icons/CMLogo'
 import { useModal } from '@/state/modal'
@@ -78,35 +78,17 @@ export default function AboutPage() {
 	}, [])
 
 	const handleSendFeedback = useCallback(() => {
-		const deviceDetailsText = `Device's Detail:
-		\r${APP_INFO.map(([key, value]) => `${key}: ${value}`).join('\n')}
-		`
-
 		const subject = `Give feedback for app ${packageJson.name}`
-		const body = `Hola ${packageJson.author.name}
-
-		\r${deviceDetailsText}
-
-		\rComentarios:
-		`
-		const url = `mailto:${packageJson.author.email}?subject=${subject}&body=${body}`
+		const body = `${BASE_SEND_MESSAGE}\n\rComentarios:\n`
+		const url = `${BASE_URL}?subject=${subject}&body=${body}`
 		Linking.openURL(url)
 	}, [])
 
 	const handleSendBugReport = useCallback(() => {
-		const deviceDetailsText = `Device's Detail:
-		\r${APP_INFO.map(([key, value]) => `${key}: ${value}`).join('\n')}
-		`
-
 		const subject = `Bug Report for app ${packageJson.name}`
-		const body = `Hola ${packageJson.author.name}
+		const body = `${BASE_SEND_MESSAGE}\n\rReporte:\n`
 
-		\r${deviceDetailsText}
-
-		\rReporte:
-		`
-
-		const url = `mailto:${packageJson.author.email}?subject=${subject}&body=${body}`
+		const url = `${BASE_URL}?subject=${subject}&body=${body}`
 		Linking.openURL(url)
 	}, [])
 

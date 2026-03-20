@@ -1,6 +1,6 @@
 import * as Constants from 'expo-constants'
 import * as Device from 'expo-device'
-import packageJson from '../../package.json'
+import packageJson from '@/package.json'
 
 export const APP_INFO = [
 	['Version', packageJson.version],
@@ -13,3 +13,11 @@ export const APP_INFO = [
 	['Device', Device.modelName || 'Unknown']
 ] satisfies [string, string][]
 
+export const BASE_SEND_MESSAGE = `
+  \r Hola ${packageJson.author.name}
+
+	\r Device's Detail:
+	\r${APP_INFO.map(([key, value]) => `${key}: ${value}`).join('\n')}
+	`
+
+export const BASE_URL = `mailto:${packageJson.author.email}`
