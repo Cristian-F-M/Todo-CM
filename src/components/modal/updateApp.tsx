@@ -73,7 +73,7 @@ export function UpdateAppModal() {
 
 				<View
 					style={{
-						height,
+						maxHeight: height,
 						overflow: 'hidden'
 					}}
 				>
