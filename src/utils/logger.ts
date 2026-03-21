@@ -13,10 +13,11 @@ const currentDate = new Date()
 const logsDir = new FileSystem.Directory(FileSystem.Paths.document, 'logs')
 if (!logsDir.exists) logsDir.create()
 export const LOG_FILE = new FileSystem.File(logsDir, `${currentDate}.log`)
-if (!LOG_FILE.exists) LOG_FILE.create()
 
 // biome-ignore lint/suspicious/noExplicitAny: -
 const fileTransport: transportFunctionType<any> = async ({ rawMsg, level }) => {
+	if (!LOG_FILE.exists) LOG_FILE.create()
+
 	try {
 		const existing = LOG_FILE.textSync()
 
