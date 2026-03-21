@@ -6,7 +6,7 @@ export function DateItem({
 	value,
 	className
 }: {
-	value: string
+	value: string | number
 	className?: string
 }) {
 	const themeStyles = useThemeStyles()
@@ -14,7 +14,7 @@ export function DateItem({
 	return (
 		<View className={twMerge('', className)}>
 			<Text className="" style={{ color: themeStyles.textPrimary() }}>
-				{value}
+				{String(value).padStart(2, '0')}
 			</Text>
 		</View>
 	)
