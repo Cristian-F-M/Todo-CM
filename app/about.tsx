@@ -1,3 +1,4 @@
+import { useNetInfo } from '@react-native-community/netinfo'
 import {
 	IconBugFilled,
 	IconCopy,
@@ -34,6 +35,7 @@ export default function AboutPage() {
 	const { checkUpdate, needUpdate, data } = useRelease()
 	const themeStyles = useThemeStyles()
 	const { openModal } = useModal()
+	const netInfo = useNetInfo()
 
 	const styles = StyleSheet.create({
 		card: {
@@ -93,7 +95,10 @@ export default function AboutPage() {
 	}, [])
 
 	const handleSearchUpdate = useCallback(async () => {
-		// TODO: Verificar si hay conexión a internet - si no -> mostrat toast and return
+		if (!netInfo.isConnected) {
+			ToastAndroid.show('No hay conexión a internet :(', ToastAndroid.SHORT)
+			return
+		}
 
 		setIsSearchingUpdate(true)
 		await checkUpdate()
@@ -108,7 +113,7 @@ export default function AboutPage() {
 		}
 
 		setSearchUpdateText('Estás en la última versión')
-	}, [checkUpdate, openModal, needUpdate, data])
+	}, [checkUpdate, openModal, needUpdate, data, netInfo])
 
 	return (
 		<Screen className="w-[90%] mx-auto">
