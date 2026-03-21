@@ -2,13 +2,14 @@ import { useNetInfo } from '@react-native-community/netinfo'
 import {
 	IconBugFilled,
 	IconCopy,
+	IconFileCode,
 	IconMessageReportFilled
 } from '@tabler/icons-react-native'
 import * as Clipboard from 'expo-clipboard'
 import * as Linking from 'expo-linking'
 import { Stack } from 'expo-router'
 import type { ExtendedStackNavigationOptions } from 'expo-router/build/layouts/StackClient'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import {
 	ActivityIndicator,
 	Pressable,
@@ -18,6 +19,8 @@ import {
 	ToastAndroid,
 	View
 } from 'react-native'
+import type { Modalize } from 'react-native-modalize'
+import { DownloadLogsModal } from '@/components/about/logs/DownloadLogs'
 import { SocialNetworks } from '@/components/about/social-networks/SocialNetworks'
 import { Screen } from '@/components/layout/Screen'
 import { APP_INFO, BASE_SEND_MESSAGE, BASE_URL } from '@/constants/about'
@@ -35,6 +38,7 @@ export default function AboutPage() {
 	const { checkUpdate, needUpdate, data } = useRelease()
 	const themeStyles = useThemeStyles()
 	const { openModal } = useModal()
+	const downloadLogsModalRef = useRef<Modalize>(null)
 	const netInfo = useNetInfo()
 
 	const styles = StyleSheet.create({
@@ -202,6 +206,28 @@ export default function AboutPage() {
 							</Text>
 						</View>
 					</Pressable>
+
+					{/* <download-logs /> */}
+					<Pressable
+						style={styles.card}
+						onPress={() => downloadLogsModalRef?.current?.open()}
+					>
+						<View>
+							<IconFileCode color={themeStyles.textPrimary()} size={24} />
+						</View>
+						<View>
+							<Text className="font-semibold" style={styles.cardText}>
+								Descargar logs
+							</Text>
+							<Text
+								style={{
+									color: themeStyles.textMuted()
+								}}
+							>
+								Descarga los logs de la aplicación
+							</Text>
+						</View>
+					</Pressable>
 				</View>
 
 				{/* <app-information /> */}
@@ -257,6 +283,8 @@ export default function AboutPage() {
 					</View>
 				</View>
 			</ScrollView>
+
+			<DownloadLogsModal modalRef={downloadLogsModalRef}></DownloadLogsModal>
 		</Screen>
 	)
 }
