@@ -1,5 +1,5 @@
 import * as Haptics from 'expo-haptics'
-import { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import {
 	Dimensions,
 	FlatList,
@@ -13,6 +13,7 @@ import {
 } from 'react-native'
 import { twMerge } from 'tailwind-merge'
 import type { ContextMenuItemData } from '@/types/contextMenu'
+import { removeKeysFromObject } from '@/utils'
 import { useThemeStyles } from '@/utils/theme'
 import { ContextMenuItem } from './ContextMenuItem'
 
@@ -105,6 +106,22 @@ export function ContextMenu({
 
 	const onPressKey = showOnLongPress ? 'onLongPress' : 'onPress'
 
+	const [newChildren, childProps] = useMemo(() => {
+		const child = React.Children.only(children)
+
+		if (React.isValidElement(child)) {
+			const newChild = React.cloneElement(child, {})
+			const childProps = child.props as Record<string, unknown>
+			const newProps = removeKeysFromObject(childProps, [
+				'onPress',
+				'onLongPress',
+				'onLayout'
+			])
+			return [newChild, newProps]
+		}
+		return [children, {}]
+	}, [children])
+
 	return (
 		<>
 			<Pressable
@@ -113,9 +130,10 @@ export function ContextMenu({
 					setTriggerMeta((prev) => ({ ...prev, width, height }))
 				}}
 				{...{ [onPressKey]: handleTriggerPress }}
+				{...childProps}
 			>
 				<View className="z-50" pointerEvents="none">
-					{children}
+					{newChildren}
 				</View>
 			</Pressable>
 			<Modal
