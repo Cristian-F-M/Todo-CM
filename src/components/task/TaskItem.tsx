@@ -102,8 +102,8 @@ export function TaskItem({ task }: { task: Task }) {
 					}
 				]}
 			>
-				<View className="active:bg-primary-pressed  p-1 rounded-lg">
-					<IconDotsVertical color={themeStyles.textPrimary()} />
+				<View className="active:bg-primary-pressed p-0.5 rounded-lg">
+					<IconDotsVertical size={20} color={themeStyles.textPrimary()} />
 				</View>
 			</ContextMenu>
 		</Animated.View>

@@ -41,34 +41,38 @@ export function FolderItem({ folder }: { folder: FolderType }) {
 		<Link
 			href={`/folder/${folder.id}`}
 			asChild
-			className="flex flex-row px-4 py-4 mb-3 h-16 rounded-lg justify-between border"
+			className="flex flex-row px-2 py-2 mb-3 min-h-16 rounded-lg justify-between border"
 			style={{
 				backgroundColor: themeStyles.surface(),
-				borderColor: themeStyles.border()
+				borderColor: themeStyles.border(),
+				maxHeight: 180
 			}}
 		>
-			<Pressable className="w-full flex flex-row items-center">
+			<Pressable className="w-full flex flex-row items-center justify-center ">
 				<Animated.View
 					className="flex flex-row flex-1 items-center justify-between"
 					layout={LinearTransition.stiffness(2)}
 				>
-					<View className="flex flex-row gap-x-2 items-center justify-center">
-						<IconFolder color={themeStyles.textMuted()} />
-						<View className="flex flex-col">
+					<View className="flex-1 flex flex-row gap-x-2 items-center justify-center max-h-[60%]">
+						<View className="self-start">
+							<IconFolder color={themeStyles.textMuted()} />
+						</View>
+						<View className="flex-1 flex flex-col gap-y-2">
 							<Text
-								className="text-lg tracking-wider leading-tight items-center justify-center"
+								className="text-lg tracking-wider leading-none items-center justify-center overflow-hidden"
 								style={{ color: themeStyles.textPrimary() }}
 							>
 								{folder.name}
 							</Text>
 							<Text
-								className="text-xs leading-tight"
+								className="text-xs leading-none"
 								style={{ color: themeStyles.textMuted() }}
 							>
 								{folder.taskCount} tareas
 							</Text>
 						</View>
 					</View>
+
 					<ContextMenu
 						title={folder.name}
 						items={[
@@ -87,8 +91,8 @@ export function FolderItem({ folder }: { folder: FolderType }) {
 							}
 						]}
 					>
-						<View className="active:bg-primary-pressed p-1 rounded-lg">
-							<IconDotsVertical color={themeStyles.textPrimary()} />
+						<View className="active:bg-primary-pressed p-0.5 rounded-lg self-start">
+							<IconDotsVertical size={20} color={themeStyles.textPrimary()} />
 						</View>
 					</ContextMenu>
 				</Animated.View>
