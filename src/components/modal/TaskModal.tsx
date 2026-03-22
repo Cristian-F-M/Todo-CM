@@ -1,10 +1,11 @@
 import { IconBell } from '@tabler/icons-react-native'
 import { useCallback, useMemo, useState } from 'react'
-import { Pressable, Text, TextInput, View } from 'react-native'
+import { Pressable, Text, View } from 'react-native'
 import { Switch } from 'react-native-gesture-handler'
 import Animated, { LinearTransition } from 'react-native-reanimated'
 import uuid from 'react-native-uuid'
 import { twMerge } from 'tailwind-merge'
+import { Input } from '@/components/layout/Input'
 import { TimePicker } from '@/components/TimePicker/TimePicker'
 import { useModal } from '@/state/modal'
 import useTask from '@/state/Task'
@@ -146,41 +147,19 @@ export function TaskModal() {
 			{/* <main /> */}
 			<View>
 				{/* <input-container /> */}
-				<View>
-					<View
-						className="mt-6 rounded-lg border"
-						style={{
-							backgroundColor: themeStyles.surfaceSoft(),
-							borderColor: themeStyles.border()
+				<View className="mt-6">
+					<Input
+						multiline={true}
+						numberOfLines={6}
+						textAlignVertical="top"
+						value={textInput}
+						placeholder="Nombre de la tarea"
+						onValueChange={(value) => {
+							setError(null)
+							setTextInput(value)
 						}}
-					>
-						{/* <View></View> */}
-						<TextInput
-							multiline={true}
-							numberOfLines={6}
-							textAlignVertical="top"
-							value={textInput}
-							className="px-3 min-h-12"
-							style={{
-								color: themeStyles.textPrimary()
-							}}
-							placeholderTextColor={themeStyles.textSecondary()}
-							placeholder="Nombre de la tarea"
-							onChange={(e) => {
-								setError(null)
-								setTextInput(e.nativeEvent.text)
-							}}
-						/>
-					</View>
-					{/* <input-error /> */}
-					<Text
-						className={twMerge('mt-1 text-sm hidden', error && 'block')}
-						style={{
-							color: themeStyles.danger()
-						}}
-					>
-						{error}
-					</Text>
+						error={error}
+					/>
 				</View>
 
 				{/* <notification-container> */}
