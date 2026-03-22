@@ -33,9 +33,16 @@ export function DeleteModal() {
 		closeModal('delete')
 	}, [closeModal, setItem])
 
+	if (!item) return null
+
 	const modalTitle =
-		item?.type === 'FOLDER' ? 'Eliminar carpeta' : 'Eliminar tarea'
-	const modalType = item?.type === 'FOLDER' ? 'carpeta' : 'tarea'
+		item.type === 'FOLDER' ? 'Eliminar carpeta' : 'Eliminar tarea'
+	const modalType = item.type === 'FOLDER' ? 'carpeta' : 'tarea'
+
+	const itemName = item.data.name.trim().replace(/\n/g, ' ')
+	const itemNameLength = itemName.length
+	const itemNameTruncated =
+		itemNameLength > 20 ? `${itemName.slice(0, 20)}...` : itemName
 
 	return (
 		<View className="w-full px-6 py-5 flex-col items-center justify-center">
@@ -79,7 +86,7 @@ export function DeleteModal() {
 							color: themeStyles.textSecondary()
 						}}
 					>
-						"{item?.data.name}"
+						"{itemNameTruncated}"
 					</Text>
 					? Esta acción no se puede deshacer.
 				</Text>
