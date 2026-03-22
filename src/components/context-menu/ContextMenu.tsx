@@ -164,7 +164,7 @@ export function ContextMenu({
 					>
 						{title && (
 							<>
-								<View className="w-full px-4 py-1">
+								<View className="w-full px-4 py-1 max-h-10">
 									<Text
 										className="text-center text-xs"
 										style={{
