@@ -70,12 +70,8 @@ export function FolderModal() {
 						error={error}
 					/>
 				</View>
-				<View className="mt-2">
-					<StyledPressable
-						text={pressableText}
-						className="mt-3"
-						onPress={handleSubmit}
-					/>
+				<View className="mt-4">
+					<StyledPressable text={pressableText} onPress={handleSubmit} />
 				</View>
 			</View>
 		</View>
