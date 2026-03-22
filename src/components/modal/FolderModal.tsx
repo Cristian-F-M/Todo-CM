@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
-import { Text, TextInput, View } from 'react-native'
+import { Text, View } from 'react-native'
 import uuid from 'react-native-uuid'
-import { twMerge } from 'tailwind-merge'
+import { Input } from '@/components/layout/Input'
 import useFolder from '@/state/Folder'
 import { useModal } from '@/state/modal'
 import { useThemeStyles } from '@/utils/theme'
@@ -58,38 +58,17 @@ export function FolderModal() {
 			{/* <main /> */}
 			<View>
 				{/* <input-container /> */}
-				<View>
-					<View
-						className="mt-6 rounded-lg border"
-						style={{
-							borderColor: themeStyles.border(),
-							backgroundColor: themeStyles.surfaceSoft()
+				<View className="mt-2">
+					<Input
+						onValueChange={(value) => {
+							setError(null)
+							setTextInput(value)
 						}}
-					>
-						{/* <View></View> */}
-						<TextInput
-							value={textInput}
-							className="px-3 h-12"
-							placeholderTextColor={themeStyles.textPrimary(0.7)}
-							placeholder="Nombre de la carpeta"
-							onChange={(e) => {
-								setError(null)
-								setTextInput(e.nativeEvent.text)
-							}}
-							style={{
-								color: themeStyles.textPrimary()
-							}}
-						/>
-					</View>
-					{/* <input-error /> */}
-					<Text
-						className={twMerge('mt-1 text-sm hidden', error && 'block')}
-						style={{
-							color: themeStyles.danger()
-						}}
-					>
-						{error}
-					</Text>
+						value={textInput}
+						placeholder="Nombre de la carpeta"
+						onSubmitEditing={handleSubmit}
+						error={error}
+					/>
 				</View>
 				<View className="mt-2">
 					<StyledPressable
