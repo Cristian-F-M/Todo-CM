@@ -1,4 +1,4 @@
-import { BackHandler, ToastAndroid } from 'react-native'
+import { ToastAndroid } from 'react-native'
 import { executeQuery, runScript, select } from '@/database/querys'
 import { LOGGER } from './logger'
 
@@ -19,7 +19,7 @@ export async function createTables() {
 		`
 	)
 
-	executeQuery('PRAGMA user_version = 1;')
+	await executeQuery('PRAGMA user_version = 1;')
 
 	return { succes, message }
 }
@@ -41,7 +41,6 @@ export async function migrateDB() {
 	if (!succes || !result) {
 		LOGGER.error(message)
 		ToastAndroid.show('No se pudo migrar la base de datos', ToastAndroid.LONG)
-		BackHandler.exitApp()
 		return
 	}
 
@@ -52,7 +51,6 @@ export async function migrateDB() {
 		if (!succes) {
 			LOGGER.error(message)
 			ToastAndroid.show('No se pudo crear la base de datos', ToastAndroid.LONG)
-			BackHandler.exitApp()
 			return
 		}
 	}
@@ -65,9 +63,8 @@ export async function migrateDB() {
 		if (!succes) {
 			LOGGER.error(message)
 			ToastAndroid.show('No se pudo migrar la base de datos', ToastAndroid.LONG)
-			BackHandler.exitApp()
 			return
 		}
-		executeQuery('PRAGMA user_version = 2;')
+		await executeQuery('PRAGMA user_version = 2;')
 	}
 }
