@@ -1,6 +1,6 @@
 {
 	"name": "todo-v2",
-	"version": "1.16.0",
+	"version": "1.19.0",
 	"main": "expo-router/entry",
 	"author": {
 		"email": "cfmorales.diaz@gmail.com",
