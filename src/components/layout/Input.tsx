@@ -1,5 +1,4 @@
 import { Text, TextInput, type TextInputProps, View } from 'react-native'
-import { twMerge } from 'tailwind-merge'
 import { useThemeStyles } from '@/utils/theme'
 
 interface InputProps extends TextInputProps {
@@ -25,14 +24,16 @@ export function Input({ value, onValueChange, error, ...props }: InputProps) {
 				}}
 				{...props}
 			/>
-			<Text
-				className={twMerge('text-sm mt-1 opacity-0', error && 'opacity-100')}
-				style={{
-					color: themeStyles.danger()
-				}}
-			>
-				{error}
-			</Text>
+			{error && (
+				<Text
+					className={'text-sm mt-1'}
+					style={{
+						color: themeStyles.danger()
+					}}
+				>
+					{error}
+				</Text>
+			)}
 		</View>
 	)
 }
