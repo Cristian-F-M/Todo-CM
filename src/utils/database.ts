@@ -1,5 +1,6 @@
 import { BackHandler, ToastAndroid } from 'react-native'
 import { executeQuery, runScript, select } from '@/database/querys'
+import { LOGGER } from './logger'
 
 export async function initDatabase() {
 	executeQuery(
@@ -34,10 +35,11 @@ export async function removeNotificationId(notificationId: string) {
 }
 
 export async function migrateDB() {
-	const { succes, result } = select<{ user_version: number }>(
+	const { succes, result, message } = select<{ user_version: number }>(
 		'PRAGMA user_version;'
 	)
 	if (!succes || !result) {
+		LOGGER.error(message)
 		ToastAndroid.show('No se pudo migrar la base de datos', ToastAndroid.LONG)
 		BackHandler.exitApp()
 		return
@@ -46,8 +48,9 @@ export async function migrateDB() {
 	const { user_version = 0 } = result
 
 	if (user_version < 1) {
-		const { succes } = createTables()
+		const { succes, message } = createTables()
 		if (!succes) {
+			LOGGER.error(message)
 			ToastAndroid.show('No se pudo crear la base de datos', ToastAndroid.LONG)
 			BackHandler.exitApp()
 			return
@@ -55,11 +58,12 @@ export async function migrateDB() {
 	}
 
 	if (user_version < 2) {
-		const { succes } = executeQuery(
+		const { succes, message } = executeQuery(
 			'ALTER TABLE tasks ADD COLUMN isCompleted BOOLEAN DEFAULT false;'
 		)
 
 		if (!succes) {
+			LOGGER.error(message)
 			ToastAndroid.show('No se pudo migrar la base de datos', ToastAndroid.LONG)
 			BackHandler.exitApp()
 			return

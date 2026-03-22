@@ -22,7 +22,7 @@ export function runScript(query: string) {
 		db.execSync(query)
 		return { succes: true }
 	} catch (err: unknown) {
-		console.error(err)
+		LOGGER.error(err)
 		return { succes: false, message: 'Query execution failed' }
 	} finally {
 		db.closeSync()
@@ -38,7 +38,7 @@ export function executeQuery(query: string, ...params: Params) {
 		const result = db.runSync(query, ...params)
 		return { succes: true, result }
 	} catch (err: unknown) {
-		console.error(err)
+		LOGGER.error(err)
 		return { succes: false, message: 'Query execution failed' }
 	} finally {
 		db.closeSync()
@@ -54,7 +54,7 @@ export function select<T>(query: string, ...params: Params) {
 		const result = db.getFirstSync<T>(query, params)
 		return { succes: true, result }
 	} catch (err: unknown) {
-		console.error(err)
+		LOGGER.error(err)
 		return { succes: false, message: 'Query execution failed' }
 	} finally {
 		db.closeSync()
@@ -70,7 +70,7 @@ export function selectAll<T>(query: string, ...params: Params) {
 		const result = db.getAllSync<T>(query, params)
 		return { succes: true, result }
 	} catch (err: unknown) {
-		console.error(err)
+		LOGGER.error(err)
 		return { succes: false, message: 'Query execution failed' }
 	} finally {
 		db.closeSync()
