@@ -159,7 +159,9 @@ export default function RootLayout() {
 	}, [setModal, getModalFns])
 
 	useEffect(() => {
-		splashScreenRef.current?.startAnimation()
+		setTimeout(() => {
+			splashScreenRef.current?.startAnimation()
+		}, 300)
 	}, [])
 
 	return (
