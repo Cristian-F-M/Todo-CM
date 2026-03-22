@@ -79,6 +79,7 @@ export default function RootLayout() {
 	const themeStyles = useThemeStyles()
 	const splashScreenRef = useRef<AnimatedSplashScreenHandle>(null)
 	let splashScreenAnimationTimeout: NodeJS.Timeout | undefined
+	const isReady = useRef(false)
 
 	const themeVars = useMemo(() => {
 		const entries = Object.entries(themes[theme as Theme].colors).map(
@@ -114,22 +115,18 @@ export default function RootLayout() {
 
 	useLayoutEffect(() => {
 		async function init() {
-			loadFolders()
-			loadTasks()
+			await migrateDB()
 
-			await Promise.all([migrateDB(), loadConfigs(), loadThemes()])
-			splashScreenRef.current?.resetAnimation()
-			splashScreenRef.current?.hide()
-			clearTimeout(splashScreenAnimationTimeout)
+			await Promise.all([
+				loadFolders(),
+				loadTasks(),
+				loadConfigs(),
+				loadThemes()
+			])
+			isReady.current = true
 		}
 		init()
-	}, [
-		loadFolders,
-		loadTasks,
-		loadConfigs,
-		loadThemes,
-		splashScreenAnimationTimeout
-	])
+	}, [loadFolders, loadTasks, loadConfigs, loadThemes])
 
 	const getModalFns = useCallback((ref: React.RefObject<Modalize | null>) => {
 		return {
@@ -139,11 +136,20 @@ export default function RootLayout() {
 	}, [])
 
 	const handleAnimationEnd = useCallback(() => {
+		if (isReady.current) {
+			setTimeout(() => {
+				splashScreenRef.current?.resetAnimation()
+				splashScreenRef.current?.hide()
+				clearTimeout(splashScreenAnimationTimeout)
+			}, 300)
+			return
+		}
+
 		splashScreenAnimationTimeout = setTimeout(() => {
 			splashScreenRef.current?.resetAnimation()
 			splashScreenRef.current?.startAnimation()
 		}, 2000)
-	}, [])
+	}, [splashScreenAnimationTimeout])
 
 	useLayoutEffect(() => {
 		setModal('task', { ...getModalFns(taskModalRef) })
