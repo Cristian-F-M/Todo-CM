@@ -8,7 +8,7 @@ import * as Notifications from 'expo-notifications'
 import * as SplashScreen from 'expo-splash-screen'
 import * as SystemUI from 'expo-system-ui'
 import { vars } from 'nativewind'
-import { useCallback, useLayoutEffect, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef } from 'react'
 import type { Modalize } from 'react-native-modalize'
 import { Host } from 'react-native-portalize'
 import {
@@ -16,6 +16,9 @@ import {
 	ReanimatedLogLevel
 } from 'react-native-reanimated'
 import { colorKit } from 'reanimated-color-picker'
+import AnimatedSplashScreen, {
+	type AnimatedSplashScreenHandle
+} from '@/components/layout/AnimatedSplashScreen'
 import { DeleteModal } from '@/components/modal/DeleteModal'
 import { FolderModal } from '@/components/modal/FolderModal'
 import { Modal } from '@/components/modal/Modal'
@@ -37,7 +40,7 @@ configureReanimatedLogger({
 })
 
 SystemUI.setBackgroundColorAsync('transparent')
-SplashScreen.preventAutoHideAsync()
+SplashScreen.hideAsync()
 
 Notifications.setNotificationHandler({
 	handleNotification: async () => ({
@@ -74,6 +77,7 @@ export default function RootLayout() {
 	const deleteModalRef = useRef<Modalize>(null)
 	const updateModalRef = useRef<Modalize>(null)
 	const themeStyles = useThemeStyles()
+	const splashScreenRef = useRef<AnimatedSplashScreenHandle>(null)
 
 	const themeVars = useMemo(() => {
 		const entries = Object.entries(themes[theme as Theme].colors).map(
@@ -113,7 +117,7 @@ export default function RootLayout() {
 			loadTasks()
 
 			await Promise.all([migrateDB(), loadConfigs(), loadThemes()])
-			SplashScreen.hideAsync()
+			splashScreenRef.current?.hide()
 		}
 		init()
 	}, [loadFolders, loadTasks, loadConfigs, loadThemes])
@@ -132,10 +136,14 @@ export default function RootLayout() {
 		setModal('update', { ...getModalFns(updateModalRef) })
 	}, [setModal, getModalFns])
 
+	useEffect(() => {
+		splashScreenRef.current?.startAnimation()
+	}, [])
 
 	return (
 		<GestureHandlerRootView>
 			<Host>
+				<AnimatedSplashScreen ref={splashScreenRef} />
 				<View
 					style={[
 						vars(themeVars),
