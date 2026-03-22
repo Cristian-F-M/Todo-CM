@@ -78,6 +78,7 @@ export default function RootLayout() {
 	const updateModalRef = useRef<Modalize>(null)
 	const themeStyles = useThemeStyles()
 	const splashScreenRef = useRef<AnimatedSplashScreenHandle>(null)
+	let splashScreenAnimationTimeout: NodeJS.Timeout | undefined
 
 	const themeVars = useMemo(() => {
 		const entries = Object.entries(themes[theme as Theme].colors).map(
@@ -117,16 +118,31 @@ export default function RootLayout() {
 			loadTasks()
 
 			await Promise.all([migrateDB(), loadConfigs(), loadThemes()])
+			splashScreenRef.current?.resetAnimation()
 			splashScreenRef.current?.hide()
+			clearTimeout(splashScreenAnimationTimeout)
 		}
 		init()
-	}, [loadFolders, loadTasks, loadConfigs, loadThemes])
+	}, [
+		loadFolders,
+		loadTasks,
+		loadConfigs,
+		loadThemes,
+		splashScreenAnimationTimeout
+	])
 
 	const getModalFns = useCallback((ref: React.RefObject<Modalize | null>) => {
 		return {
 			open: () => ref.current?.open(),
 			close: () => ref.current?.close()
 		}
+	}, [])
+
+	const handleAnimationEnd = useCallback(() => {
+		splashScreenAnimationTimeout = setTimeout(() => {
+			splashScreenRef.current?.resetAnimation()
+			splashScreenRef.current?.startAnimation()
+		}, 2000)
 	}, [])
 
 	useLayoutEffect(() => {
@@ -143,7 +159,10 @@ export default function RootLayout() {
 	return (
 		<GestureHandlerRootView>
 			<Host>
-				<AnimatedSplashScreen ref={splashScreenRef} />
+				<AnimatedSplashScreen
+					ref={splashScreenRef}
+					onAnimatedEnd={handleAnimationEnd}
+				/>
 				<View
 					style={[
 						vars(themeVars),
