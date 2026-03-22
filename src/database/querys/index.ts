@@ -25,7 +25,7 @@ export async function runScript(query: string) {
 		LOGGER.error(err)
 		return { succes: false, message: 'Query execution failed' }
 	} finally {
-		db.closeSync()
+		await db.closeAsync()
 	}
 }
 
@@ -41,7 +41,7 @@ export async function executeQuery(query: string, ...params: Params) {
 		LOGGER.error(err)
 		return { succes: false, message: 'Query execution failed' }
 	} finally {
-		db.closeSync()
+		await db.closeAsync()
 	}
 }
 
@@ -57,7 +57,7 @@ export async function select<T>(query: string, ...params: Params) {
 		LOGGER.error(err)
 		return { succes: false, message: 'Query execution failed' }
 	} finally {
-		db.closeSync()
+		await db.closeAsync()
 	}
 }
 
@@ -73,6 +73,6 @@ export async function selectAll<T>(query: string, ...params: Params) {
 		LOGGER.error(err)
 		return { succes: false, message: 'Query execution failed' }
 	} finally {
-		db.closeSync()
+		await db.closeAsync()
 	}
 }
