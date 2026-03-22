@@ -1,6 +1,6 @@
 {
-	"name": "todo-v2",
-	"version": "1.19.1",
+	"name": "todo-cm",
+	"version": "1.19.2",
 	"private": false,
 	"description": "Android application made with react-native + expo, which allows the user to create tasks, organize them into folders, mark them as completed, allows changing themes, creation of automatic and manual themes 100% customizable.",
 	"keywords": [
@@ -34,7 +34,7 @@
 		"ios": "expo run:ios",
 		"web": "expo start --web",
 		"lint": "eslint .",
-		"build:apk": "bunx expo prebuild --clean && ./android/gradlew assembleRelease",
+		"build:apk": "bunx expo prebuild --clean && cd android && ./gradlew assembleRelease",
 		"build:release": "bun run align:apk && bun run sign:apk",
 		"align:apk": "shx mkdir -p output && $ANDROID_HOME/build-tools/36.0.0/zipalign -f -v 4 android/app/build/outputs/apk/release/app-release.apk output/app-release.apk",
 		"sign:apk": "$ANDROID_HOME/build-tools/36.0.0/apksigner sign --ks credentials/android/todo-cm.jks --ks-key-alias cmorales --out output/app-release.apk output/app-release.apk",
