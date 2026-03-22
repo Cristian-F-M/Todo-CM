@@ -52,9 +52,11 @@ export function Modal({
 	return (
 		<Portal>
 			<Modalize
-				scrollViewProps={{
-					keyboardShouldPersistTaps: 'handled'
-				}}
+				{...(!props.flatListProps && {
+					scrollViewProps: {
+						keyboardShouldPersistTaps: 'handled'
+					}
+				})}
 				ref={modalRef}
 				modalStyle={modalStyle}
 				adjustToContentHeight
