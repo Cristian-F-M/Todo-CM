@@ -32,7 +32,7 @@ export function TaskItem({ task }: { task: Task }) {
 		const { confirmDeleteTask } = configs
 
 		if (!confirmDeleteTask) {
-			deleteTask(task.id)
+			await deleteTask(task.id)
 			removeNotification(task.notificationId ?? '')
 			return
 		}
@@ -40,11 +40,11 @@ export function TaskItem({ task }: { task: Task }) {
 		openModal('delete')
 	}, [deleteTask, openModal, setItem, task, configs])
 
-	const handleCompleteTask = useCallback(() => {
+	const handleCompleteTask = useCallback(async () => {
 		const newValue = !isChecked
 
 		setIsChecked(newValue)
-		update({ ...task, isCompleted: newValue })
+		await update({ ...task, isCompleted: newValue })
 	}, [task, update, isChecked])
 
 	return (

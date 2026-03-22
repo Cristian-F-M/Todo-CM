@@ -2,8 +2,10 @@ import { ToastAndroid } from 'react-native'
 import { executeQuery, select, selectAll } from '@/database/querys'
 import type { Task } from '@/types/task'
 
-export function getAll() {
-	const { succes, result, message } = selectAll<Task>('SELECT * FROM tasks')
+export async function getAll() {
+	const { succes, result, message } = await selectAll<Task>(
+		'SELECT * FROM tasks'
+	)
 
 	if (!succes || !result) {
 		const msg = message || 'No se pudieron obtener las tareas'
@@ -14,8 +16,8 @@ export function getAll() {
 	return result
 }
 
-export function getById(id: string) {
-	const { succes, result, message } = select<Task>(
+export async function getById(id: string) {
+	const { succes, result, message } = await select<Task>(
 		'SELECT * FROM tasks WHERE id = ?',
 		id
 	)
@@ -29,8 +31,8 @@ export function getById(id: string) {
 	return result
 }
 
-export function create(task: Task) {
-	const { succes, message, result } = executeQuery(
+export async function create(task: Task) {
+	const { succes, message, result } = await executeQuery(
 		'INSERT INTO tasks (id, name, folderId) VALUES (?, ?, ?)',
 		task.id,
 		task.name,
@@ -44,8 +46,8 @@ export function create(task: Task) {
 	return succes
 }
 
-export function update(task: Task) {
-	const { succes, message, result } = executeQuery(
+export async function update(task: Task) {
+	const { succes, message, result } = await executeQuery(
 		'UPDATE tasks SET name = ?, folderId = ?, isCompleted = ? WHERE id = ?',
 		task.name,
 		task.folderId,
@@ -60,8 +62,8 @@ export function update(task: Task) {
 	return succes
 }
 
-export function deleteById(id: string) {
-	const { succes, message, result } = executeQuery(
+export async function deleteById(id: string) {
+	const { succes, message, result } = await executeQuery(
 		'DELETE FROM tasks WHERE id = ?',
 		id
 	)
@@ -73,8 +75,8 @@ export function deleteById(id: string) {
 	return succes
 }
 
-export function deleteByFolderId(folderId: string) {
-	const { succes, message, result } = executeQuery(
+export async function deleteByFolderId(folderId: string) {
+	const { succes, message, result } = await executeQuery(
 		'DELETE FROM tasks WHERE folderId = ?',
 		folderId
 	)

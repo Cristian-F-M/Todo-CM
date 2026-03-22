@@ -6,24 +6,24 @@ import useTask from './Task'
 
 interface FolderState {
 	folders: Folder[]
-	delete: (id: string) => void
-	update: (folder: Folder) => void
-	create: (folder: Folder) => void
-	load: () => void
+	delete: (id: string) => Promise<void>
+	update: (folder: Folder) => Promise<void>
+	create: (folder: Folder) => Promise<void>
+	load: () => Promise<void>
 	getById: (id: string) => Folder | undefined
 	getTasksByFolderId: (folderId: string) => Task[]
 }
 
 const useFolder = create<FolderState>()((set, get) => ({
 	folders: [],
-	delete: (id: string) => {
+	delete: async (id: string) => {
 		const { folders } = get()
-		FolderDB.deleteById(id)
+		await FolderDB.deleteById(id)
 		set({ folders: folders.filter((folder) => folder.id !== id) })
 	},
-	update: (folder: Folder) => {
+	update: async (folder: Folder) => {
 		const { folders } = get()
-		FolderDB.update(folder)
+		await FolderDB.update(folder)
 
 		const index = folders.findIndex((f) => f.id === folder.id)
 		if (index === -1) return
@@ -33,13 +33,13 @@ const useFolder = create<FolderState>()((set, get) => ({
 
 		set({ folders: newFolders })
 	},
-	create: (folder: Folder) => {
+	create: async (folder: Folder) => {
 		const { folders } = get()
-		FolderDB.create(folder)
+		await FolderDB.create(folder)
 		set({ folders: folders.concat(folder) })
 	},
-	load: () => {
-		const folders = FolderDB.getAll()
+	load: async () => {
+		const folders = await FolderDB.getAll()
 		set({ folders })
 	},
 	getById: (id: string) => {

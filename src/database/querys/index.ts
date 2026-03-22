@@ -2,9 +2,9 @@ import * as SQLite from 'expo-sqlite'
 import type { Params } from '@/types/database'
 import { LOGGER } from '@/utils/logger'
 
-export function connectDB() {
+export async function connectDB() {
 	try {
-		const db = SQLite.openDatabaseSync('todo-cm.db', {
+		const db = await SQLite.openDatabaseAsync('todo-cm.db', {
 			useNewConnection: true
 		})
 		return db
@@ -13,13 +13,13 @@ export function connectDB() {
 	}
 }
 
-export function runScript(query: string) {
-	const db = connectDB()
+export async function runScript(query: string) {
+	const db = await connectDB()
 
 	if (!db) return { succes: false, message: 'Database connection failed' }
 
 	try {
-		db.execSync(query)
+		await db.execAsync(query)
 		return { succes: true }
 	} catch (err: unknown) {
 		LOGGER.error(err)
@@ -29,13 +29,13 @@ export function runScript(query: string) {
 	}
 }
 
-export function executeQuery(query: string, ...params: Params) {
-	const db = connectDB()
+export async function executeQuery(query: string, ...params: Params) {
+	const db = await connectDB()
 
 	if (!db) return { succes: false, message: 'Database connection failed' }
 
 	try {
-		const result = db.runSync(query, ...params)
+		const result = await db.runAsync(query, ...params)
 		return { succes: true, result }
 	} catch (err: unknown) {
 		LOGGER.error(err)
@@ -45,13 +45,13 @@ export function executeQuery(query: string, ...params: Params) {
 	}
 }
 
-export function select<T>(query: string, ...params: Params) {
-	const db = connectDB()
+export async function select<T>(query: string, ...params: Params) {
+	const db = await connectDB()
 
 	if (!db) return { succes: false, message: 'Database connection failed' }
 
 	try {
-		const result = db.getFirstSync<T>(query, params)
+		const result = await db.getFirstAsync<T>(query, params)
 		return { succes: true, result }
 	} catch (err: unknown) {
 		LOGGER.error(err)
@@ -61,13 +61,13 @@ export function select<T>(query: string, ...params: Params) {
 	}
 }
 
-export function selectAll<T>(query: string, ...params: Params) {
-	const db = connectDB()
+export async function selectAll<T>(query: string, ...params: Params) {
+	const db = await connectDB()
 
 	if (!db) return { succes: false, message: 'Database connection failed' }
 
 	try {
-		const result = db.getAllSync<T>(query, params)
+		const result = await db.getAllAsync<T>(query, params)
 		return { succes: true, result }
 	} catch (err: unknown) {
 		LOGGER.error(err)

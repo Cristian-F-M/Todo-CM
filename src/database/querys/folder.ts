@@ -2,8 +2,10 @@ import { ToastAndroid } from 'react-native'
 import { executeQuery, select, selectAll } from '@/database/querys'
 import type { Folder } from '@/types/folder'
 
-export function getAll(): Folder[] {
-	const { succes, result, message } = selectAll<Folder>('SELECT * FROM folders')
+export async function getAll(): Promise<Folder[]> {
+	const { succes, result, message } = await selectAll<Folder>(
+		'SELECT * FROM folders'
+	)
 
 	if (!succes || !result) {
 		const msg = message || 'No se pudieron obtener las carpetas'
@@ -14,8 +16,8 @@ export function getAll(): Folder[] {
 	return result
 }
 
-export function getById(id: string) {
-	const { succes, result, message } = select<Folder>(
+export async function getById(id: string) {
+	const { succes, result, message } = await select<Folder>(
 		'SELECT * FROM folders WHERE id = ?',
 		id
 	)
@@ -29,8 +31,8 @@ export function getById(id: string) {
 	return result
 }
 
-export function create(folder: Folder) {
-	const { succes, message, result } = executeQuery(
+export async function create(folder: Folder) {
+	const { succes, message, result } = await executeQuery(
 		'INSERT INTO folders (id, name, taskCount) VALUES (?, ?, ?)',
 		folder.id,
 		folder.name,
@@ -43,8 +45,8 @@ export function create(folder: Folder) {
 	return succes
 }
 
-export function update(folder: Folder) {
-	const { succes, message, result } = executeQuery(
+export async function update(folder: Folder) {
+	const { succes, message, result } = await executeQuery(
 		'UPDATE folders SET name = ?, taskCount = ? WHERE id = ?',
 		folder.name,
 		folder.taskCount,
@@ -57,8 +59,8 @@ export function update(folder: Folder) {
 	return succes
 }
 
-export function deleteById(id: string) {
-	const { succes, message, result } = executeQuery(
+export async function deleteById(id: string) {
+	const { succes, message, result } = await executeQuery(
 		'DELETE FROM folders WHERE id = ?',
 		id
 	)

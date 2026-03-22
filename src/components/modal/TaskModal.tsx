@@ -67,7 +67,7 @@ export function TaskModal() {
 		if (thereIsItem && item.type === 'TASK') {
 			if (notificate) removeNotification(item.data.notificationId ?? '')
 
-			update({ ...item.data, name: taskName, notificationId })
+			await update({ ...item.data, name: taskName, notificationId })
 			closeModal('task')
 
 			return
@@ -83,7 +83,7 @@ export function TaskModal() {
 			notificationId
 		}
 
-		create(newTask)
+		await create(newTask)
 
 		closeModal('task')
 	}, [

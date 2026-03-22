@@ -14,17 +14,17 @@ export function DeleteModal() {
 	const { delete: deleteFolder } = useFolder()
 	const themeStyles = useThemeStyles()
 
-	const handleDeleteItem = useCallback(() => {
+	const handleDeleteItem = useCallback(async () => {
 		if (!item) return
 
 		if (item.type === 'TASK') {
-			deleteTask(item.data.id)
+			await deleteTask(item.data.id)
 			removeNotification(item.data.notificationId ?? '')
 			closeModal('delete')
 			return
 		}
 
-		deleteFolder(item.data.id)
+		await deleteFolder(item.data.id)
 		closeModal('delete')
 	}, [deleteFolder, deleteTask, closeModal, item])
 

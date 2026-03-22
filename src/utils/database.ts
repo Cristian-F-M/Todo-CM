@@ -11,8 +11,8 @@ export async function initDatabase() {
 	)
 }
 
-export function createTables() {
-	const { succes, message } = runScript(
+export async function createTables() {
+	const { succes, message } = await runScript(
 		`
 		CREATE TABLE IF NOT EXISTS folders (id TEXT PRIMARY KEY, name TEXT, taskCount INTEGER);
 		CREATE TABLE IF NOT EXISTS tasks (id TEXT PRIMARY KEY, name TEXT, folderId TEXT, notificationId TEXT, FOREIGN KEY(folderId) REFERENCES folders(id));
@@ -27,7 +27,7 @@ export function createTables() {
 export async function removeNotificationId(notificationId: string) {
 	if (!notificationId) return
 
-	const { succes, message } = executeQuery(
+	const { succes, message } = await executeQuery(
 		'UPDATE tasks SET notificationId = null WHERE notificationId = ?',
 		notificationId
 	)
@@ -35,7 +35,7 @@ export async function removeNotificationId(notificationId: string) {
 }
 
 export async function migrateDB() {
-	const { succes, result, message } = select<{ user_version: number }>(
+	const { succes, result, message } = await select<{ user_version: number }>(
 		'PRAGMA user_version;'
 	)
 	if (!succes || !result) {
@@ -48,7 +48,7 @@ export async function migrateDB() {
 	const { user_version = 0 } = result
 
 	if (user_version < 1) {
-		const { succes, message } = createTables()
+		const { succes, message } = await createTables()
 		if (!succes) {
 			LOGGER.error(message)
 			ToastAndroid.show('No se pudo crear la base de datos', ToastAndroid.LONG)
@@ -58,7 +58,7 @@ export async function migrateDB() {
 	}
 
 	if (user_version < 2) {
-		const { succes, message } = executeQuery(
+		const { succes, message } = await executeQuery(
 			'ALTER TABLE tasks ADD COLUMN isCompleted BOOLEAN DEFAULT false;'
 		)
 
