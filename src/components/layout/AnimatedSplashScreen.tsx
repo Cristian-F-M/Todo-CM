@@ -2,7 +2,6 @@ import { useCallback, useImperativeHandle, useState } from 'react'
 import { Portal } from 'react-native-portalize'
 import Animated, {
 	cancelAnimation,
-	type SharedValue,
 	useAnimatedStyle,
 	useSharedValue,
 	withDelay,
@@ -49,15 +48,29 @@ export default function AnimatedSplashScreen({
 	const o3 = useSharedValue(0)
 	const o4 = useSharedValue(0)
 
-	const getStyles = useCallback(
-		(translateY: SharedValue<number>, opacity: SharedValue<number>) => {
-			return useAnimatedStyle(() => ({
-				transform: [{ translateY: translateY.value }],
-				opacity: opacity.value
-			}))
-		},
-		[]
-	)
+	const style1 = useAnimatedStyle(() => ({
+		transform: [{ translateY: t1.value }],
+		opacity: o1.value
+	}))
+
+	const style2 = useAnimatedStyle(() => ({
+		transform: [{ translateY: t2.value }],
+		opacity: o2.value
+	}))
+
+	const style3 = useAnimatedStyle(() => ({
+		transform: [{ translateY: t3.value }],
+		opacity: o3.value
+	}))
+
+	const style4 = useAnimatedStyle(() => ({
+		transform: [{ translateY: t4.value }],
+		opacity: o4.value
+	}))
+
+	const handleAnimationEnd = useCallback(() => {
+		if (onAnimatedEnd) onAnimatedEnd()
+	}, [onAnimatedEnd])
 
 	const startAnimation = useCallback(() => {
 		t1.value = withDelay(0, withSpring(0))
@@ -78,7 +91,7 @@ export default function AnimatedSplashScreen({
 				if (finished) scheduleOnRN(handleAnimationEnd)
 			})
 		)
-	}, [])
+	}, [t1, t2, t3, t4, o1, o2, o3, o4, scale, handleAnimationEnd])
 
 	const stopAnimation = useCallback(() => {
 		cancelAnimation(t1)
@@ -91,7 +104,7 @@ export default function AnimatedSplashScreen({
 		cancelAnimation(o4)
 		cancelAnimation(scale)
 		clearTimeout(animatedEndtimeOut)
-	}, [])
+	}, [animatedEndtimeOut, t1, t2, t3, t4, o1, o2, o3, o4, scale])
 
 	const resetAnimation = useCallback(() => {
 		stopAnimation()
@@ -107,16 +120,12 @@ export default function AnimatedSplashScreen({
 		o4.value = 0
 
 		scale.value = 0.9
-	}, [])
+	}, [t1, t2, t3, t4, o1, o2, o3, o4, scale, stopAnimation])
 
 	const hide = useCallback(() => {
 		setWasShowed(true)
 		opacity.value = withTiming(0)
-	}, [])
-
-	const handleAnimationEnd = useCallback(() => {
-		if (onAnimatedEnd) onAnimatedEnd()
-	}, [])
+	}, [opacity])
 
 	useImperativeHandle(
 		ref,
@@ -126,7 +135,7 @@ export default function AnimatedSplashScreen({
 			resetAnimation,
 			hide
 		}),
-		[]
+		[startAnimation, stopAnimation, resetAnimation, hide]
 	)
 
 	return (
@@ -154,23 +163,23 @@ export default function AnimatedSplashScreen({
 						<AnimatedPath
 							d="M344 32V254V255.5L302.5 223V117.5L238 168.5V240.5L198 208.5V150L344 32Z"
 							fill="currentColor"
-							animatedProps={getStyles(t1, o1)}
+							animatedProps={style1}
 						/>
 
 						<AnimatedPath
 							d="M175 166.5L103 110V161L174.5 217.127L175 166.5Z"
 							fill="currentColor"
-							animatedProps={getStyles(t2, o2)}
+							animatedProps={style2}
 						/>
 						<AnimatedPath
 							d="M69.5 308L0 253V203L102 282.5L69.5 308Z"
 							fill="currentColor"
-							animatedProps={getStyles(t3, o3)}
+							animatedProps={style3}
 						/>
 						<AnimatedPath
 							d="M94.5 52.5L0 127.5V75L94 0L175 63.8518V115L94.5 52.5Z"
 							fill="currentColor"
-							animatedProps={getStyles(t4, o4)}
+							animatedProps={style4}
 						/>
 					</Svg>
 				</Animated.View>
