@@ -8,7 +8,14 @@ import * as Notifications from 'expo-notifications'
 import * as SplashScreen from 'expo-splash-screen'
 import * as SystemUI from 'expo-system-ui'
 import { vars } from 'nativewind'
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef } from 'react'
+import {
+	useCallback,
+	useEffect,
+	useLayoutEffect,
+	useMemo,
+	useRef,
+	useState
+} from 'react'
 import type { Modalize } from 'react-native-modalize'
 import { Host } from 'react-native-portalize'
 import {
@@ -79,7 +86,8 @@ export default function RootLayout() {
 	const themeStyles = useThemeStyles()
 	const splashScreenRef = useRef<AnimatedSplashScreenHandle>(null)
 	let splashScreenAnimationTimeout: NodeJS.Timeout | undefined
-	const isReady = useRef(false)
+	const [isReady, setIsReady] = useState(false)
+	const hasAnimated = useRef(false)
 
 	const themeVars = useMemo(() => {
 		const entries = Object.entries(themes[theme as Theme].colors).map(
@@ -123,7 +131,7 @@ export default function RootLayout() {
 				loadConfigs(),
 				loadThemes()
 			])
-			isReady.current = true
+			setIsReady(true)
 		}
 		init()
 	}, [loadFolders, loadTasks, loadConfigs, loadThemes])
@@ -136,20 +144,25 @@ export default function RootLayout() {
 	}, [])
 
 	const handleAnimationEnd = useCallback(() => {
-		if (isReady.current) {
-			setTimeout(() => {
-				splashScreenRef.current?.resetAnimation()
-				splashScreenRef.current?.hide()
-				clearTimeout(splashScreenAnimationTimeout)
-			}, 300)
-			return
-		}
+		hasAnimated.current = true
 
-		splashScreenAnimationTimeout = setTimeout(() => {
-			splashScreenRef.current?.resetAnimation()
-			splashScreenRef.current?.startAnimation()
-		}, 2000)
-	}, [splashScreenAnimationTimeout])
+		if (!isReady) return
+
+		setTimeout(() => {
+			splashScreenRef.current?.atEnd()
+			splashScreenRef.current?.hide()
+			clearTimeout(splashScreenAnimationTimeout)
+		}, 300)
+	}, [isReady, splashScreenAnimationTimeout])
+
+	useEffect(() => {
+		if (!isReady || !hasAnimated.current) return
+
+		splashScreenRef.current?.atEnd()
+		splashScreenRef.current?.hide()
+
+		clearTimeout(splashScreenAnimationTimeout)
+	}, [isReady, splashScreenAnimationTimeout])
 
 	useLayoutEffect(() => {
 		setModal('task', { ...getModalFns(taskModalRef) })
@@ -161,7 +174,7 @@ export default function RootLayout() {
 	useEffect(() => {
 		setTimeout(() => {
 			splashScreenRef.current?.startAnimation()
-		}, 300)
+		}, 600)
 	}, [])
 
 	return (
