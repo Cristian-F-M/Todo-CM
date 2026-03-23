@@ -1,5 +1,4 @@
-import { useCallback, useImperativeHandle, useState } from 'react'
-import { Portal } from 'react-native-portalize'
+import { useCallback, useImperativeHandle } from 'react'
 import Animated, {
 	cancelAnimation,
 	useAnimatedStyle,
@@ -17,6 +16,7 @@ export interface AnimatedSplashScreenHandle {
 	stopAnimation: () => void
 	resetAnimation: () => void
 	hide: () => void
+	atEnd: () => void
 }
 
 interface AnimatedSplashScreenProps extends SvgProps {
@@ -32,16 +32,15 @@ export default function AnimatedSplashScreen({
 	...props
 }: AnimatedSplashScreenProps) {
 	const themeStyles = useThemeStyles()
-	const [wasShowed, setWasShowed] = useState(false)
 	let animatedEndtimeOut: NodeJS.Timeout | undefined
+	const initialT = 150
 
-	const scale = useSharedValue(0.9)
 	const opacity = useSharedValue(1)
-
-	const t1 = useSharedValue(50)
-	const t2 = useSharedValue(50)
-	const t3 = useSharedValue(50)
-	const t4 = useSharedValue(50)
+	const scale = useSharedValue(0.9)
+	const t1 = useSharedValue(initialT)
+	const t2 = useSharedValue(initialT)
+	const t3 = useSharedValue(initialT)
+	const t4 = useSharedValue(initialT)
 
 	const o1 = useSharedValue(0)
 	const o2 = useSharedValue(0)
@@ -73,20 +72,20 @@ export default function AnimatedSplashScreen({
 	}, [onAnimatedEnd])
 
 	const startAnimation = useCallback(() => {
-		t1.value = withDelay(0, withSpring(0))
-		o1.value = withDelay(0, withTiming(1, { duration: 400 }))
+		t1.value = withDelay(50, withSpring(0))
+		o1.value = withDelay(50, withTiming(1, { duration: 800 }))
 
-		t2.value = withDelay(150, withSpring(0))
-		o2.value = withDelay(150, withTiming(1, { duration: 400 }))
+		t2.value = withDelay(200, withSpring(0))
+		o2.value = withDelay(200, withTiming(1, { duration: 800 }))
 
-		t3.value = withDelay(300, withSpring(0))
-		o3.value = withDelay(300, withTiming(1, { duration: 400 }))
+		t3.value = withDelay(350, withSpring(0))
+		o3.value = withDelay(350, withTiming(1, { duration: 800 }))
 
-		t4.value = withDelay(450, withSpring(0))
-		o4.value = withDelay(450, withTiming(1, { duration: 400 }))
+		t4.value = withDelay(500, withSpring(0))
+		o4.value = withDelay(500, withTiming(1, { duration: 800 }))
 
 		scale.value = withDelay(
-			700,
+			1000,
 			withSpring(1, {}, (finished) => {
 				if (finished) scheduleOnRN(handleAnimationEnd)
 			})
@@ -109,10 +108,10 @@ export default function AnimatedSplashScreen({
 	const resetAnimation = useCallback(() => {
 		stopAnimation()
 
-		t1.value = 50
-		t2.value = 50
-		t3.value = 50
-		t4.value = 50
+		t1.value = initialT
+		t2.value = initialT
+		t3.value = initialT
+		t4.value = initialT
 
 		o1.value = 0
 		o2.value = 0
@@ -122,9 +121,26 @@ export default function AnimatedSplashScreen({
 		scale.value = 0.9
 	}, [t1, t2, t3, t4, o1, o2, o3, o4, scale, stopAnimation])
 
+	const atEnd = useCallback(() => {
+		t1.value = withDelay(50, withSpring(0))
+		o1.value = withDelay(50, withTiming(1, { duration: 200 }))
+
+		t2.value = withDelay(200, withSpring(0))
+		o2.value = withDelay(200, withTiming(1, { duration: 200 }))
+
+		t3.value = withDelay(350, withSpring(0))
+		o3.value = withDelay(350, withTiming(1, { duration: 200 }))
+
+		t4.value = withDelay(500, withSpring(0))
+		o4.value = withDelay(500, withTiming(1, { duration: 200 }))
+
+		scale.value = withSpring(1, {}, (finished) => {
+			if (finished) scheduleOnRN(handleAnimationEnd)
+		})
+	}, [t1, t2, t3, t4, o1, o2, o3, o4, scale, handleAnimationEnd])
+
 	const hide = useCallback(() => {
-		setWasShowed(true)
-		opacity.value = withTiming(0)
+		opacity.value = withTiming(0, { duration: 300 })
 	}, [opacity])
 
 	useImperativeHandle(
@@ -133,57 +149,56 @@ export default function AnimatedSplashScreen({
 			startAnimation,
 			stopAnimation,
 			resetAnimation,
-			hide
+			hide,
+			atEnd
 		}),
-		[startAnimation, stopAnimation, resetAnimation, hide]
+		[startAnimation, stopAnimation, resetAnimation, hide, atEnd]
 	)
 
 	return (
-		<Portal>
+		<Animated.View
+			pointerEvents="none"
+			className="absolute z-50 w-full h-full items-center justify-center"
+			style={{
+				opacity,
+				backgroundColor: '#111827'
+			}}
+		>
 			<Animated.View
-				pointerEvents={wasShowed ? 'none' : 'auto'}
-				className="absolute inset-0 w-full h-full items-center justify-center"
 				style={{
-					backgroundColor: themeStyles.background(),
-					opacity: opacity
+					transform: [{ scale: scale }]
 				}}
 			>
-				<Animated.View
-					style={{
-						transform: [{ scale: scale }]
-					}}
+				<Svg
+					width={180}
+					height={160}
+					color={themeStyles.textPrimary()}
+					viewBox="0 0 344 308"
+					{...props}
 				>
-					<Svg
-						width={180}
-						height={160}
-						color={themeStyles.textPrimary()}
-						viewBox="0 0 344 308"
-						{...props}
-					>
-						<AnimatedPath
-							d="M344 32V254V255.5L302.5 223V117.5L238 168.5V240.5L198 208.5V150L344 32Z"
-							fill="currentColor"
-							animatedProps={style1}
-						/>
+					<AnimatedPath
+						d="M344 32V254V255.5L302.5 223V117.5L238 168.5V240.5L198 208.5V150L344 32Z"
+						fill="currentColor"
+						animatedProps={style1}
+					/>
 
-						<AnimatedPath
-							d="M175 166.5L103 110V161L174.5 217.127L175 166.5Z"
-							fill="currentColor"
-							animatedProps={style2}
-						/>
-						<AnimatedPath
-							d="M69.5 308L0 253V203L102 282.5L69.5 308Z"
-							fill="currentColor"
-							animatedProps={style3}
-						/>
-						<AnimatedPath
-							d="M94.5 52.5L0 127.5V75L94 0L175 63.8518V115L94.5 52.5Z"
-							fill="currentColor"
-							animatedProps={style4}
-						/>
-					</Svg>
-				</Animated.View>
+					<AnimatedPath
+						d="M175 166.5L103 110V161L174.5 217.127L175 166.5Z"
+						fill="currentColor"
+						animatedProps={style2}
+					/>
+					<AnimatedPath
+						d="M69.5 308L0 253V203L102 282.5L69.5 308Z"
+						fill="currentColor"
+						animatedProps={style3}
+					/>
+					<AnimatedPath
+						d="M94.5 52.5L0 127.5V75L94 0L175 63.8518V115L94.5 52.5Z"
+						fill="currentColor"
+						animatedProps={style4}
+					/>
+				</Svg>
 			</Animated.View>
-		</Portal>
+		</Animated.View>
 	)
 }
