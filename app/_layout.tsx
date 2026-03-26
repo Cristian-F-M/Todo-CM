@@ -114,7 +114,7 @@ export default function RootLayout() {
 	const stackScreenOptions = useMemo<NativeStackNavigationOptions>(() => {
 		return {
 			headerShown: false,
-			animation: 'slide_from_right',
+			animation: 'ios_from_right',
 			contentStyle: {
 				backgroundColor: themeStyles.background()
 			}
