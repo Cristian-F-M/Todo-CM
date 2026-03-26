@@ -146,7 +146,13 @@ export default function RootLayout() {
 	const handleAnimationEnd = useCallback(() => {
 		hasAnimated.current = true
 
-		if (!isReady) return
+		if (!isReady) {
+			splashScreenAnimationTimeout = setTimeout(() => {
+				splashScreenRef.current?.resetAnimation()
+				splashScreenRef.current?.startAnimation()
+			}, 1000)
+			return
+		}
 
 		setTimeout(() => {
 			splashScreenRef.current?.atEnd()
