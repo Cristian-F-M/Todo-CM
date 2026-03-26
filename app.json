@@ -1,7 +1,7 @@
 {
 	"name": "todo cm",
 	"slug": "todo-cm",
-	"version": "1.19.5",
+	"version": "1.20.0",
 	"githubUrl": "https://github.com/Cristian-F-M/todo-app-v2",
 	"orientation": "portrait",
 	"icon": "./src/assets/logo-cm-small-white.png",
@@ -35,7 +35,8 @@
 				"icon": "./src/assets/logo-cm-white.png"
 			}
 		],
-		"@react-native-community/datetimepicker"
+		"@react-native-community/datetimepicker",
+		"expo-sharing"
 	],
 	"extra": {
 		"router": {
