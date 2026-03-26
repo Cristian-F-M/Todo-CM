@@ -193,11 +193,7 @@ export default function RootLayout() {
 					]}
 					className="flex-1"
 				>
-					<StatusBar
-						style={statusBarProps.style}
-						backgroundColor={statusBarProps.backgroundColor}
-						translucent={false}
-					/>
+					<StatusBar style={statusBarProps.style} />
 					<Stack screenOptions={stackScreenOptions} />
 				</View>
 
