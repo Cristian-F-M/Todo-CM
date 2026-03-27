@@ -1,5 +1,8 @@
 import * as FileSystem from 'expo-file-system'
-import { createDownloadResumable } from 'expo-file-system/legacy'
+import {
+	createDownloadResumable,
+	type DownloadResumable
+} from 'expo-file-system/legacy'
 import * as IntentLauncher from 'expo-intent-launcher'
 import * as Notifications from 'expo-notifications'
 import { ToastAndroid } from 'react-native'
@@ -7,6 +10,8 @@ import { useModal } from '@/state/modal'
 import { useRelease } from '@/state/release'
 import { LOGGER } from '@/utils/logger'
 import { getNotificationsPermissions } from './notifications'
+
+let downloadResumable: DownloadResumable | null = null
 
 export async function downloadApp() {
 	const { data } = useRelease.getState()
@@ -33,7 +38,7 @@ export async function downloadApp() {
 	setProgress(0)
 	await getNotificationsPermissions()
 
-	const downloadResumable = createDownloadResumable(
+	downloadResumable = createDownloadResumable(
 		asset.browser_download_url,
 		path.uri,
 		{},
@@ -50,7 +55,9 @@ export async function downloadApp() {
 	)
 
 	try {
-		await downloadResumable.downloadAsync()
+		const result = await downloadResumable.downloadAsync()
+
+		if (!result) return
 
 		installAPK(path.uri)
 
@@ -70,6 +77,23 @@ export async function downloadApp() {
 		LOGGER.error(error)
 		ToastAndroid.show('Error al descargar la app', ToastAndroid.SHORT)
 		setProgress(null)
+	}
+}
+
+export async function cancelDownloadApp() {
+	console.log(downloadResumable)
+	if (!downloadResumable) return
+	console.log('huh')
+	const { setProgress } = useRelease.getState()
+
+	try {
+		await downloadResumable.cancelAsync()
+		downloadResumable = null
+		setProgress(null)
+		ToastAndroid.show('Descarga cancelada', ToastAndroid.SHORT)
+	} catch (error) {
+		LOGGER.error(error)
+		ToastAndroid.show('Error al cancelar la descarga', ToastAndroid.SHORT)
 	}
 }
 

@@ -1,4 +1,8 @@
-import { IconDownload, IconExternalLink } from '@tabler/icons-react-native'
+import {
+	IconDownload,
+	IconExternalLink,
+	IconX
+} from '@tabler/icons-react-native'
 import { Link } from 'expo-router'
 import { useMemo, useState } from 'react'
 import { Image, Linking, Pressable, Text, View } from 'react-native'
@@ -6,7 +10,11 @@ import Markdown from 'react-native-markdown-renderer'
 import type { SvgProps } from 'react-native-svg'
 import { useRelease } from '@/state/release'
 import { useThemeStyles } from '@/utils/theme'
-import { downloadApp, getIsValidAPK } from '@/utils/updateApp'
+import {
+	cancelDownloadApp,
+	downloadApp,
+	getIsValidAPK
+} from '@/utils/updateApp'
 import { StyledPressable } from '../layout/StyledPressable'
 
 export function UpdateAppModal() {
@@ -20,8 +28,12 @@ export function UpdateAppModal() {
 
 	const { tag_name, published_at, body } = data
 	let downloadTextButton = `Descargar (${Math.floor(data.assets[0].size / 1e6)} MB)`
-	if (progress) downloadTextButton = `${progress}%`
+	if (progress) downloadTextButton = `Cancelar (${progress}%)`
 	if (progress === 100 || isValidAPK) downloadTextButton = 'Instalar'
+
+	const canCancelDonwload =
+		typeof progress === 'number' && progress >= 0 && progress < 100
+	const DownloadIconButton = !canCancelDonwload ? IconDownload : IconX
 
 	return (
 		<View className="px-2 py-4">
@@ -152,7 +164,11 @@ export function UpdateAppModal() {
 			<View className="flex-row justify-between">
 				<StyledPressable
 					onPress={() => {
-						if (progress !== null) return
+						if (progress !== null) {
+							if (canCancelDonwload) cancelDownloadApp()
+							return
+						}
+
 						downloadApp()
 					}}
 					text={downloadTextButton}
@@ -160,8 +176,9 @@ export function UpdateAppModal() {
 					style={{
 						backgroundColor: themeStyles.surface()
 					}}
-					icon={(props: SvgProps) => <IconDownload {...props} size={20} />}
-					disabled={!!progress && progress > 0 && progress < 100}
+					icon={(props: SvgProps) => (
+						<DownloadIconButton {...props} size={20} />
+					)}
 				/>
 				<StyledPressable
 					onPress={() => Linking.openURL(data.html_url)}
