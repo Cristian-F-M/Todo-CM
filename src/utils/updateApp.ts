@@ -24,9 +24,8 @@ export async function downloadApp() {
 	)
 	path = new FileSystem.File(path)
 
-	if (!getIsValidAPK()) {
+	if (!getIsValidAPK() && path.exists) {
 		path.delete()
-		path = new FileSystem.File(path)
 	}
 
 	if (path.exists) return installAPK(path.uri)
