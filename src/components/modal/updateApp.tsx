@@ -28,7 +28,7 @@ export function UpdateAppModal() {
 
 	const { tag_name, published_at, body } = data
 	let downloadTextButton = `Descargar (${Math.floor(data.assets[0].size / 1e6)} MB)`
-	if (progress) downloadTextButton = `Cancelar (${progress}%)`
+	if (progress !== null) downloadTextButton = `Cancelar (${progress}%)`
 	if (progress === 100 || isValidAPK) downloadTextButton = 'Instalar'
 
 	const canCancelDonwload =
