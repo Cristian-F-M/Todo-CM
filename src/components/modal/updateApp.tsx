@@ -161,6 +161,22 @@ export function UpdateAppModal() {
 				</Pressable>
 			</Link>
 
+			<View
+				className="mt-4 p-3 rounded-lg"
+				style={{
+					backgroundColor: themeStyles.surface()
+				}}
+			>
+				<Text
+					className="text-sm"
+					style={{
+						color: themeStyles.textSecondary()
+					}}
+				>
+					Puedes seguir usando la app mientras se descarga la nueva versión.
+				</Text>
+			</View>
+
 			<View className="flex-row justify-between">
 				<StyledPressable
 					onPress={() => {
