@@ -3,13 +3,16 @@ import { useCallback, useEffect } from 'react'
 import { Pressable, Text } from 'react-native'
 import Animated, { useSharedValue, withSpring } from 'react-native-reanimated'
 import { StyledPressable } from '@/components/layout/StyledPressable'
+import useFolder from '@/state/Folder'
 import { useModal } from '@/state/modal'
 import { useThemeStyles } from '@/utils/theme'
 
-export function NoFolders({ thereAreFolders }: { thereAreFolders: boolean }) {
+export function NoFolders() {
 	const { openModal } = useModal()
 	const themeStyles = useThemeStyles()
 	const opacity = useSharedValue(0)
+	const { folders } = useFolder()
+	const thereAreFolders = folders.length > 0
 
 	const handleClickOpenModal = useCallback(() => {
 		openModal('folder')
