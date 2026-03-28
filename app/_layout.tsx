@@ -4,9 +4,7 @@ import { View } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import '../global.css'
 import type { NativeStackNavigationOptions } from '@react-navigation/native-stack'
-import * as Linking from 'expo-linking'
 import * as Notifications from 'expo-notifications'
-import { router } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import * as SystemUI from 'expo-system-ui'
 import { vars } from 'nativewind'
@@ -50,12 +48,6 @@ configureReanimatedLogger({
 
 SystemUI.setBackgroundColorAsync('transparent')
 SplashScreen.hideAsync()
-
-Linking.addEventListener('url', (event) => {
-	const [_, url] = event.url.split('//')
-	router.replace('/')
-	router.push(`/${url}`)
-})
 
 Notifications.setNotificationHandler({
 	handleNotification: async () => ({
