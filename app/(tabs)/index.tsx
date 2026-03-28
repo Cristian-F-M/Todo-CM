@@ -62,7 +62,7 @@ export default function Index() {
 				)}
 			</Animated.View>
 
-			{!thereIsFolders && <NoFolders thereAreFolders={thereIsFolders} />}
+			{!thereIsFolders && <NoFolders />}
 
 			<FloatingDownload />
 		</Screen>
