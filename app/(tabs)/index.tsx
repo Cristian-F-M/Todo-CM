@@ -32,25 +32,24 @@ export default function Index() {
 	return (
 		<Screen safeArea={true}>
 			{thereIsFolders && <BackgroundIcon />}
+			<Header />
+			{needUpdate && (
+				<Pressable
+					onPress={() => openModal('update')}
+					className="ml-auto mr-4 p-2 rounded-full justify-center items-center"
+					style={{
+						backgroundColor: themeStyles.surface(),
+						borderWidth: 2,
+						borderColor: themeStyles.border()
+					}}
+				>
+					<View className="mb-px">
+						<IconDownload size={20} color={themeStyles.primary()} />
+					</View>
+				</Pressable>
+			)}
+
 			<Animated.View style={{ opacity }}>
-				<Header />
-
-				{needUpdate && (
-					<Pressable
-						onPress={() => openModal('update')}
-						className="ml-auto mr-4 p-2 rounded-full justify-center items-center"
-						style={{
-							backgroundColor: themeStyles.surface(),
-							borderWidth: 2,
-							borderColor: themeStyles.border()
-						}}
-					>
-						<View className="mb-px">
-							<IconDownload size={20} color={themeStyles.primary()} />
-						</View>
-					</Pressable>
-				)}
-
 				{thereIsFolders && (
 					<View className="mt-4 items-center justify-center w-11/12 mx-auto mb-6">
 						<FlatList
