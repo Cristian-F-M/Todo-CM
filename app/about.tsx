@@ -1,5 +1,6 @@
 import { useNetInfo } from '@react-native-community/netinfo'
 import {
+	IconArrowLeft,
 	IconBugFilled,
 	IconCopy,
 	IconFileCode,
@@ -7,7 +8,7 @@ import {
 } from '@tabler/icons-react-native'
 import * as Clipboard from 'expo-clipboard'
 import * as Linking from 'expo-linking'
-import { Stack } from 'expo-router'
+import { Stack, useRouter } from 'expo-router'
 import type { ExtendedStackNavigationOptions } from 'expo-router/build/layouts/StackClient'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import {
@@ -40,6 +41,15 @@ export default function AboutPage() {
 	const { openModal } = useModal()
 	const downloadLogsModalRef = useRef<Modalize>(null)
 	const netInfo = useNetInfo()
+	const router = useRouter()
+
+	const handleGoBack = useCallback(() => {
+		const canGoBack = router.canGoBack()
+
+		if (canGoBack) return router.back()
+
+		router.replace('/')
+	}, [router])
 
 	const styles = StyleSheet.create({
 		card: {
@@ -70,9 +80,16 @@ export default function AboutPage() {
 			headerStyle: {
 				backgroundColor: themeStyles.surface()
 			},
-			headerTintColor: themeStyles.textPrimary()
+			headerTintColor: themeStyles.textPrimary(),
+			headerLeft() {
+				return (
+					<Pressable onPress={handleGoBack}>
+						<IconArrowLeft color={themeStyles.textPrimary()} size={24} />
+					</Pressable>
+				)
+			}
 		}),
-		[themeStyles]
+		[themeStyles, handleGoBack]
 	)
 
 	const handleCopySystemInfo = useCallback(async () => {

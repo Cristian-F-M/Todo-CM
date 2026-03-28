@@ -1,9 +1,9 @@
-import { IconPencilPlus } from '@tabler/icons-react-native'
+import { IconArrowLeft, IconPencilPlus } from '@tabler/icons-react-native'
 import * as Haptics from 'expo-haptics'
 import { router, Stack } from 'expo-router'
 import type { ExtendedStackNavigationOptions } from 'expo-router/build/layouts/StackClient'
 import { useCallback, useMemo, useRef, useState } from 'react'
-import { Text, ToastAndroid, View } from 'react-native'
+import { Pressable, Text, ToastAndroid, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import type { SvgProps } from 'react-native-svg'
 import { AutomaticCreation } from '@/components/createTheme/AutomaticCreation'
@@ -44,6 +44,14 @@ export default function CreateTheme() {
 	})
 	const scrollViewRef = useRef<ScrollView>(null)
 
+	const handleGoBack = useCallback(() => {
+		const canGoBack = router.canGoBack()
+
+		if (canGoBack) return router.back()
+
+		router.replace('/')
+	}, [])
+
 	const screenOptions = useMemo<ExtendedStackNavigationOptions>(
 		() => ({
 			headerShown: true,
@@ -52,9 +60,16 @@ export default function CreateTheme() {
 			headerStyle: {
 				backgroundColor: themeStyles.surface()
 			},
-			headerTintColor: themeStyles.textPrimary()
+			headerTintColor: themeStyles.textPrimary(),
+			headerLeft() {
+				return (
+					<Pressable onPress={handleGoBack}>
+						<IconArrowLeft color={themeStyles.textPrimary()} size={24} />
+					</Pressable>
+				)
+			}
 		}),
-		[themeStyles]
+		[themeStyles, handleGoBack]
 	)
 
 	const handleCreateTheme = useCallback(async () => {

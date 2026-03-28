@@ -1,6 +1,13 @@
-import { Stack, useGlobalSearchParams } from 'expo-router'
+import { IconArrowLeft } from '@tabler/icons-react-native'
+import { router, Stack, useGlobalSearchParams } from 'expo-router'
 import { useCallback, useEffect, useLayoutEffect, useMemo } from 'react'
-import { FlatList, type ListRenderItemInfo, Text, View } from 'react-native'
+import {
+	FlatList,
+	type ListRenderItemInfo,
+	Pressable,
+	Text,
+	View
+} from 'react-native'
 import Animated, { useSharedValue, withSpring } from 'react-native-reanimated'
 import { Folder404 } from '@/components/folder/Folder404'
 import { BackgroundIcon } from '@/components/layout/BackgroundIcon'
@@ -92,6 +99,13 @@ export default function Folder() {
 
 	const pageTitle = folder ? folder.name : 'Carpeta no encontrada'
 
+	const handleGoBack = useCallback(() => {
+		const canGoBack = router.canGoBack()
+
+		if (canGoBack) return router.back()
+		router.replace('/')
+	}, [])
+
 	const screenOptions = useMemo(
 		() => ({
 			headerShown: true,
@@ -99,9 +113,16 @@ export default function Folder() {
 			headerStyle: {
 				backgroundColor: themeStyles.surface()
 			},
-			headerTintColor: themeStyles.textPrimary()
+			headerTintColor: themeStyles.textPrimary(),
+			headerLeft() {
+				return (
+					<Pressable onPress={handleGoBack}>
+						<IconArrowLeft color={themeStyles.textPrimary()} size={24} />
+					</Pressable>
+				)
+			}
 		}),
-		[pageTitle, themeStyles]
+		[pageTitle, themeStyles, handleGoBack]
 	)
 
 	useLayoutEffect(() => {
