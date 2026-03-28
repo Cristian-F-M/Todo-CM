@@ -1,7 +1,7 @@
 {
 	"name": "todo cm",
 	"slug": "todo-cm",
-	"version": "1.21.1",
+	"version": "1.21.2",
 	"githubUrl": "https://github.com/Cristian-F-M/todo-app-v2",
 	"orientation": "portrait",
 	"icon": "./src/assets/logo-cm-small-white.png",

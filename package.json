@@ -1,6 +1,6 @@
 {
 	"name": "todo-cm",
-	"version": "1.21.1",
+	"version": "1.21.2",
 	"private": false,
 	"description": "Android application made with react-native + expo, which allows the user to create tasks, organize them into folders, mark them as completed, allows changing themes, creation of automatic and manual themes 100% customizable.",
 	"keywords": [
