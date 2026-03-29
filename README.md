@@ -1,18 +1,43 @@
-# Todo App v2 🚀
+<div align="center">
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 344 308" fill="none" color='white'>
+<path d="M344 32V254V255.5L302.5 223V117.5L238 168.5V240.5L198 208.5V150L344 32Z" fill="currentColor"/>
+<path d="M175 166.5L103 110V161L174.5 217.127L175 166.5Z" fill="currentColor"/>
+<path d="M69.5 308L0 253V203L102 282.5L69.5 308Z" fill="currentColor"/>
+<path d="M94.5 52.5L0 127.5V75L94 0L175 63.8518V115L94.5 52.5Z" fill="currentColor"/>
+</svg>
+</div>
 
-Welcome to **Todo App v2**, a modern, highly customizable task management application built with React Native and Expo. 
 
-## 🌟 Features
+# Todo CM 
 
-*   **Task Management**: Easily create, edit, and orchestrate your tasks.
-*   **Folder Organization**: Group your tasks into custom folders for better context and organization.
-*   **Status Tracking**: Mark tasks as completed with satisfying interactions.
-*   **100% Customizable Themes**: Personalize your experience with custom themes. You can change themes manually or set them up automatically.
-*   **Sleek UI**: Smooth animations and an intuitive interface designed for a seamless user experience.
+`Todo CM` es una aplicación de lista de tareas que va más allá de lo convencional, organización por `carpetas`, `notificación` en x tiempo o a una fecha especifica, permite `cambio de temas`, creación `automática` o `manual` de temas, entre otras cosas.
 
-## 📸 Screenshots
 
-Here is a glimpse of what the app looks like:
+## ✨ Características
+- 📁 Organización por carpetas (➕ creación, ✏️ edición, 🗑️ eliminación)
+- 📅🔔 Notificación de tareas
+- 🎨 Cambio de temas
+- 🧩 Creación de temas
+- ⚙️ Configuraciones en la app
+- ℹ️ Información y ayuda
+- 🔄 Actualizar la app desde la propia aplicación
+- 📝 Registro de logs
+
+
+## 🚀 ¿Qué la hace diferente?
+
+- Te permite cambiar de tema toda la aplicación
+- Crea tus propios temas, automáticamente (selecciona el color primario) o manualmente (modifica cada color)
+- Te indica cuando hay una actualización y permite actualizar desde la misma app
+
+## 🛠️ Tecnologías
+
+- React Native - Expo 
+- SQLite / Async Storage
+- Zustand 
+
+
+## 📸 Capturas de pantalla
 
 <div align="center">
   <img src="public/todo-cm-1.avif" width="200" alt="Home Screen" style="margin: 10px;" />
@@ -26,21 +51,57 @@ Here is a glimpse of what the app looks like:
   <img src="public/todo-cm-3.avif" width="200" alt="Task View" style="margin: 10px;" />
 </div>
 
-## 📥 Download
 
-[➡️ Download Latest Release](https://github.com/Cristian-F-M/Todo-CM/releases)
+## ⚙️ Instalación
 
----
+1. Dirigete a la pestaña de [releases](https://github.com/Cristian-F-M/Todo-CM/releases/latest)
+2. Ve hasta el final y descarga e instala el asset `todo-cm.apk`
 
-## 👨‍💻 Developer
 
-**Cristian Morales**
+## 🤝 Contribuir
 
-*   **GitHub**: [@Cristian-F-M](https://github.com/Cristian-F-M)
-*   **Email**: cfmorales.diaz@gmail.com
+#### Las contribuciones son bienvenidas. Haz un fork y abre un pull request.
 
-## ☕ Support My Work
+> [!NOTE] 
+> ### Requerimientos 
+> - Necesitaras tener un emulador android o un dispositivo conectado con la depuración activada
+> - Tener como minimo ~13GB para instalar dependencias
 
-If you like this app and want to support its development, consider buying me a coffee!
 
-<a href="https://www.buymeacoffee.com/cmorales" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+1. Clona el repositorio:
+```bash
+git clone https://github.com/Cristian-F-M/Todo-CM.git
+```
+
+2. Instala la dependencias 
+```bash
+npm install
+# bun install | yarn install | pnpm install
+```
+
+3. Ejecutar el comando postinstall (Utilizado para parchear una librería)
+```bash
+npm run postinstall
+# bun postinstall | yarn run postinstall | pnpm run postinstall
+```
+
+4. Ejecuta el proyecto
+> [!IMPORTANT] 
+> - Para ejecutar el proyecto necesitas una [development build](https://docs.expo.dev/develop/development-builds/introduction/)
+> - Para la primera vez necesitaras ejecutar 
+> ```bash
+> npm run android
+> # bun android | yarn run android | pnpm run android
+> ```
+> - Esto creará la development build y se instalará en el dispositivo conectado.
+> - Cada que cambies librerías nativas necesitaras ejecutar el comando anterior.
+> - #### Para ver la documentación completa de expo puedes visitar [expo.dev](https://docs.expo.dev/)
+
+```bash
+npm run start
+# bun start | yarn run start | pnpm run start
+```
+
+## 📄 Licencia
+
+MIT
